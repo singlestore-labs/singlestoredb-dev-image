@@ -61,9 +61,10 @@ jobs:
             TOOLBOX_VERSION=${{ env.TOOLBOX_VERSION }}
 
       - name: Anchore Container Scan
-        uses: anchore/scan-action@v3.2.5
+        uses: anchore/scan-action@v3
         with:
           image: ${{ steps.image-meta.outputs.image }}
+          severity-cutoff: high
 
   test-image:
     runs-on: ubuntu-latest
