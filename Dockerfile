@@ -45,6 +45,18 @@ RUN /tmp/init.sh
 ADD start.sh /start.sh
 CMD ["/start.sh"]
 
+ADD licenses /licenses
+
+HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD memsqlctl query --sql "select 1" --memsql-id $(memsqlctl list-nodes -q --role master)
+
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp
 EXPOSE 9000/tcp
+
+LABEL org.opencontainers.image.url="https://github.com/singlestore-labs/singlestoredb-dev-image"
+LABEL org.opencontainers.image.documentation="https://github.com/singlestore-labs/singlestoredb-dev-image"
+LABEL org.opencontainers.image.source="https://github.com/singlestore-labs/singlestoredb-dev-image"
+LABEL org.opencontainers.image.vendor="SingleStore"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
+LABEL org.opencontainers.image.title="SingleStoreDB Dev Container"
+LABEL org.opencontainers.image.description="The SingleStoreDB Dev Container is the fastest way to develop with SingleStore on your laptop or in a CI/CD environment."

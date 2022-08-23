@@ -1,0 +1,5 @@
+By using this software, you agree to the License Agreement detailed in https://www.singlestore.com/legal.
+From time to time, SingleStore may modify this Agreement per the terms defined in the Agreement.
+
+SingleStore includes third-party software, redistributed in source and/or binary form, subject to
+the licenses in "redist_licenses" in this same folder.
