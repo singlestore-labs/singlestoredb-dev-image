@@ -9,5 +9,5 @@ docker run \
     -d --name singlestore-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
-    singlestore-labs/singlestore-dev
+    ghcr.io/singlestore-labs/singlestoredb-dev
 ```

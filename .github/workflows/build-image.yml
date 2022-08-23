@@ -35,7 +35,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ghcr.io/singlestore-labs/singlestoredb-dev:${{ env.IMAGE_TAG }}
+          tags: |
+            ghcr.io/singlestore-labs/singlestoredb-dev:${{ env.IMAGE_TAG }}
+            ghcr.io/singlestore-labs/singlestoredb-dev:latest
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
             RELEASE_CHANNEL=${{ env.RELEASE_CHANNEL }}
