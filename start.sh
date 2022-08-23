@@ -13,6 +13,12 @@ if [ -z "${ROOT_PASSWORD-}" ]; then
     exit 1
 fi
 
+LOG_FILES=(
+    "/var/lib/memsql/master/tracelogs/memsql.log"
+    "/var/lib/memsql/leaf/tracelogs/memsql.log"
+    "/var/lib/singlestoredb-studio/studio.log"
+)
+
 # start the nodes
 echo "Starting SingleStore nodes..."
 time memsqlctl -jy start-node --all
@@ -24,24 +30,20 @@ memsqlctl -jy change-root-password --all --password "${ROOT_PASSWORD}"
 # set the correct license
 memsqlctl -jy set-license --license "${SINGLESTORE_LICENSE}"
 
-# run init.sql if it exists (and we haven't already run it)
-if [ -f /init.sql && ! -f /init.sql.done ]; then
-    echo "Running init.sql..."
-    memsql -p${ROOT_PASSWORD} < /init.sql
-    touch /init.sql.done
-fi
-
 # start studio
 singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
 STUDIO_PID=$!
 
-# tail the logs
-LOG_FILES=(
-    "/var/lib/memsql/master/tracelogs/memsql.log"
-    "/var/lib/memsql/leaf/tracelogs/memsql.log"
-    "/var/lib/singlestoredb-studio/studio.log"
-)
+# run init.sql if it exists (and we haven't already run it)
+if [[ -f /init.sql && ! -f /data/.init.sql.done ]]; then
+    echo "Running init.sql..."
+    memsql -p${ROOT_PASSWORD} </init.sql
+    touch /data/.init.sql.done
+fi
 
+touch /home/memsql/.ready
+
+# tail the logs
 tail -F $(printf '%s ' "${LOG_FILES[@]}") &
 TAIL_PID=$!
 

@@ -7,8 +7,8 @@ MASTER_ID=$(
     memsqlctl -jy create-node \
         --no-start \
         --base-install-dir /var/lib/memsql/master \
-        --datadir /data/master \
-    | jq .memsqlId -r
+        --datadir /data/master |
+        jq .memsqlId -r
 )
 
 LEAF_ID=$(
@@ -16,8 +16,8 @@ LEAF_ID=$(
         --no-start \
         --base-install-dir /var/lib/memsql/leaf \
         --datadir /data/leaf \
-        --port 3307 \
-    | jq .memsqlId -r
+        --port 3307 |
+        jq .memsqlId -r
 )
 
 memsqlctl -y update-config --all --key minimum_core_count --value 0

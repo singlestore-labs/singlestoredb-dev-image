@@ -36,9 +36,12 @@ RUN yum-config-manager --add-repo https://release.memsql.com/${RELEASE_CHANNEL}/
 
 RUN mkdir -p /data && chown -R memsql:memsql /data
 
+ADD memsqlctl.hcl /etc/memsql/memsqlctl.hcl
+RUN touch /data/nodes.hcl && chown memsql:memsql /data/nodes.hcl
 ADD studio.hcl /var/lib/singlestoredb-studio/studio.hcl
 RUN chown memsql:memsql /var/lib/singlestoredb-studio/studio.hcl
 
+RUN mkdir -p /home/memsql && chown -R memsql:memsql /home/memsql
 USER memsql
 
 ADD init.sh /tmp/init.sh
@@ -49,7 +52,8 @@ CMD ["/start.sh"]
 
 ADD licenses /licenses
 
-HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD memsqlctl query --sql "select 1" --memsql-id $(memsqlctl list-nodes -q --role master)
+ADD healthcheck.sh /healthcheck.sh
+HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD /healthcheck.sh
 
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp
