@@ -28,10 +28,12 @@ ARG RELEASE_CHANNEL
 ARG CLIENT_VERSION
 ARG SERVER_VERSION
 ARG STUDIO_VERSION
-ARG TOOLBOX_VERSION
 
 RUN yum-config-manager --add-repo https://release.memsql.com/${RELEASE_CHANNEL}/rpm/x86_64/repodata/memsql.repo && \
-    yum install -y singlestore-client-${CLIENT_VERSION} singlestoredb-server${SERVER_VERSION} singlestoredb-studio-${STUDIO_VERSION} singlestoredb-toolbox-${TOOLBOX_VERSION} && \
+    yum install -y \
+    singlestore-client-${CLIENT_VERSION} \
+    singlestoredb-server${SERVER_VERSION} \
+    singlestoredb-studio-${STUDIO_VERSION} && \
     yum clean all
 
 RUN mkdir -p /data && chown -R memsql:memsql /data
