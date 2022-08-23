@@ -60,6 +60,11 @@ jobs:
             STUDIO_VERSION=${{ env.STUDIO_VERSION }}
             TOOLBOX_VERSION=${{ env.TOOLBOX_VERSION }}
 
+      - name: Anchore Container Scan
+        uses: anchore/scan-action@v3.2.5
+        with:
+          image: ${{ steps.image-meta.outputs.image }}
+
   test-image:
     runs-on: ubuntu-latest
     needs: build-image
