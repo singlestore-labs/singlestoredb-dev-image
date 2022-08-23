@@ -19,31 +19,28 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout source
         uses: actions/checkout@v2
 
       - name: prepare image metadata
         id: image-meta
         run: |
-          TAG=$(git describe --always --abbrev=40)
+          if [[ ${{ github.ref_type }} == "tag" ]]; then
+            VERSION=${{ github.ref_name }}
+          else
+            VERSION=${{ github.sha }}
+          fi
           echo "::set-output name=build-date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          echo "::set-output name=tag::${TAG}"
-          echo "::set-output name=image::ghcr.io/singlestore-labs/singlestoredb-dev:${TAG}"
+          echo "::set-output name=version::${VERSION}"
+          echo "::set-output name=image::ghcr.io/singlestore-labs/singlestoredb-dev:${VERSION}"
 
-      - name: load build config
-        run: cat config.env >> $GITHUB_ENV
+          # setup build config
+          cat config.env >> ${GITHUB_ENV}
 
-      - name: Build and push
+      - name: Build image
         uses: docker/build-push-action@v3
         with:
-          push: true
+          push: false
           context: .
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -52,13 +49,18 @@ jobs:
           labels: |
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ steps.image-meta.outputs.build-date }}
-            org.opencontainers.image.version=${{ steps.image-meta.outputs.tag }}
+            org.opencontainers.image.version=${{ steps.image-meta.outputs.version }}
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
             RELEASE_CHANNEL=${{ env.RELEASE_CHANNEL }}
             SERVER_VERSION=${{ env.SERVER_VERSION }}
             CLIENT_VERSION=${{ env.CLIENT_VERSION }}
             STUDIO_VERSION=${{ env.STUDIO_VERSION }}
+
+      - name: Upload image to artifacts
+        uses: ishworkh/docker-image-artifact-upload@v1
+        with:
+          image: ${{ steps.image-meta.outputs.image }}
 
   scan-image:
     runs-on: ubuntu-latest
@@ -68,12 +70,10 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          image: ${{ needs.build-image.outputs.image }}
 
       - name: Anchore Container Scan
         uses: anchore/scan-action@v3
@@ -81,9 +81,54 @@ jobs:
           image: ${{ needs.build-image.outputs.image }}
           severity-cutoff: high
 
-  test-service:
+  test-image:
     runs-on: ubuntu-latest
     needs: build-image
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: ${{ needs.build-image.outputs.image }}
+
+      - name: run tests
+        run: |
+          ./test.sh ${{ needs.build-image.outputs.image }}
+
+  publish-image:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    needs:
+      - build-image
+      - scan-image
+      - test-image
+    steps:
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: ${{ needs.build-image.outputs.image }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag image as latest and publish
+        run: |
+          docker tag ${{ needs.build-image.outputs.image }} ghcr.io/singlestore-labs/singlestoredb-dev:latest
+          docker push ${{ needs.build-image.outputs.image }}
+          docker push ghcr.io/singlestore-labs/singlestoredb-dev:latest
+
+  test-service:
+    runs-on: ubuntu-latest
+    needs:
+      - publish-image
+      - build-image
 
     services:
       singlestoredb:
@@ -100,43 +145,3 @@ jobs:
       - name: sanity check using mysql client
         run: |
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
-
-  test-image:
-    runs-on: ubuntu-latest
-    needs: build-image
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: run tests
-        run: |
-          ./test.sh ${{ needs.build-image.outputs.image }}
-
-  publish-image:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs:
-      - build-image
-      - test-service
-      - test-image
-    steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Tag image as latest and publish
-        run: |
-          docker pull ${{ needs.build-image.outputs.image }}
-          docker tag ${{ needs.build-image.outputs.image }} ghcr.io/singlestore-labs/singlestoredb-dev:latest
-          docker push ghcr.io/singlestore-labs/singlestoredb-dev:latest
