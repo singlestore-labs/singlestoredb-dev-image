@@ -30,6 +30,27 @@ docker run \
 
 After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without loosing your data. Keep in mind that SingleStoreDB does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
 
+## How to initialize this container with a SQL file?
+
+When this docker image starts for the first time it will check to see if `/init.sql` exists in it's filesystem. If `/init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
+
+One way to do this is mounting a `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
+
+```bash
+docker run \
+    -d --name singlestore-dev \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -v ${PWD}/test_init.sql:/init.sql \
+    ghcr.io/singlestore-labs/singlestoredb-dev
+```
+
+Replace `${PWD}/test_init.sql` with an absolute path to the SQL file you want to initialize SingleStore with.
+
+> **Note**
+> `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
+
+
 ## How do use this container in a CI/CD environment?
 
 This Docker image defines a healthcheck which runs every 5 seconds. Any CI/CD system which respects the healthcheck should automatically wait for SingleStore to be running and healthy. So, all you need to do is define a service in your CI/CD system of choice which uses this Docker image.

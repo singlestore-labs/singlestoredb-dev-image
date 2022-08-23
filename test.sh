@@ -168,6 +168,17 @@ test_init_sql() {
         echo ${COUNT}
         exit 1
     fi
+
+    # verify init.sql only runs once
+    docker restart ${CURRENT_CONTAINER_ID}
+    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+
+    COUNT_AFTER_RESTART=$(query_master "select count(*) as c from foo.bar" | jq -r '.rows[0].c')
+    if [[ "${COUNT_AFTER_RESTART}" != "32" ]]; then
+        echo "Count differs from what test_init.sql should have created"
+        echo ${COUNT_AFTER_RESTART}
+        exit 1
+    fi
 }
 
 test_http_api() {

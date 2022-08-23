@@ -35,5 +35,4 @@ docker build \
     --build-arg SERVER_VERSION=${SERVER_VERSION} \
     --build-arg CLIENT_VERSION=${CLIENT_VERSION} \
     --build-arg STUDIO_VERSION=${STUDIO_VERSION} \
-    --build-arg TOOLBOX_VERSION=${TOOLBOX_VERSION} \
     .
