@@ -1,0 +1,13 @@
+check-for-app-update: true
+add-cpes-if-none: true
+severity-cutoff: high
+
+db:
+  auto-update: true
+
+exclude:
+  - /opt/*/extractors
+
+ignore:
+  # systemd is not used
+  - vulnerability: CVE-2022-2526

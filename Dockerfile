@@ -1,10 +1,12 @@
-FROM almalinux:8.6
+FROM almalinux:8.6-20220706
 
-RUN yum install yum-utils wget procps -y && \
-    yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
+RUN yum makecache --refresh && \
+    yum install -y yum-utils wget procps && \
     yum update -y curl && \
+    yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
     yum -y update-minimal --setopt=tsflags=nodocs --security --sec-severity=Important --sec-severity=Critical && \
-    dnf --enablerepo=* clean all && dnf update -y && \
+    dnf --enablerepo=* clean all && \
+    dnf update -y && \
     yum remove -y vim-minimal platform-python-pip.noarch && \
     yum update -y expat libxml2 libgcrypt && \
     yum clean all
