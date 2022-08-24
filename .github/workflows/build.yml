@@ -80,10 +80,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
             ghcr.io/singlestore-labs/singlestoredb-dev
           tags: |
             type=semver,pattern={{version}}
+          labels: |
+            org.opencontainers.image.vendor=SingleStore
 
       - name: Build and publish image
         uses: docker/build-push-action@v3

@@ -12,6 +12,9 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
+> **Note**
+> **If you are running on a Mac and have the newer Mac M1 or M2 chipset (Apple Silicon)**: You will need to add `--platform linux/amd64` to the `docker run` command to tell Docker to run the container using x86 based virtualization.
+
 ## How to use Docker volumes for persistent storage
 
 You can use a Docker volume to setup persistent storage by mounting the volume to `/data` in the container. You can do this by simply adding `-v VOLUME_NAME:/data` or `-v /data` to the Docker run command. Make sure to replace `VOLUME_NAME` with a name for the volume.
