@@ -9,6 +9,7 @@ docker run \
     -d --name singlestore-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
@@ -27,6 +28,7 @@ docker run \
     -d --name singlestore-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     -v my_cool_volume:/data \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
@@ -44,6 +46,7 @@ docker run \
     -d --name singlestore-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     -v ${PWD}/test_init.sql:/init.sql \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
