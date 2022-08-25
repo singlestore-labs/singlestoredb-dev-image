@@ -46,7 +46,7 @@ jobs:
 
       - name: run tests
         run: |
-          ./test.sh singlestore-labs/singlestoredb-dev
+          ./test/test.sh singlestore-labs/singlestoredb-dev
 
       - name: Anchore Container Scan
         uses: anchore/scan-action@v3

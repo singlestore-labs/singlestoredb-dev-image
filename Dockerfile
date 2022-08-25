@@ -36,26 +36,37 @@ RUN yum-config-manager --add-repo https://release.memsql.com/${RELEASE_CHANNEL}/
     singlestoredb-studio-${STUDIO_VERSION} && \
     yum clean all
 
-RUN mkdir -p /data && chown -R memsql:memsql /data
+ADD scripts/setup-singlestore-user.sh /scripts/setup-singlestore-user.sh
+RUN /scripts/setup-singlestore-user.sh
 
-ADD memsqlctl.hcl /etc/memsql/memsqlctl.hcl
-RUN touch /data/nodes.hcl && chown memsql:memsql /data/nodes.hcl
-ADD studio.hcl /var/lib/singlestoredb-studio/studio.hcl
-RUN chown memsql:memsql /var/lib/singlestoredb-studio/studio.hcl
+RUN mkdir -p /data && chown -R singlestore:singlestore /data
+RUN mkdir -p /logs && chown -R singlestore:singlestore /logs
+RUN mkdir -p /startup && chown -R singlestore:singlestore /startup
 
-RUN mkdir -p /home/memsql && chown -R memsql:memsql /home/memsql
-USER memsql
+# remove /var/lib/memsql, this image uses /data and /logs to store everything
+# we also need to be able to detect when we are upgrading from the old cluster in a box image
+RUN rm -rf /var/lib/memsql
 
-ADD init.sh /tmp/init.sh
-RUN /tmp/init.sh
+ADD assets/memsqlctl.hcl /etc/memsql/memsqlctl.hcl
+RUN chown singlestore:singlestore /etc/memsql/memsqlctl.hcl
 
-ADD start.sh /start.sh
-CMD ["/start.sh"]
+RUN touch /data/nodes.hcl && chown singlestore:singlestore /data/nodes.hcl
+
+ADD assets/studio.hcl /var/lib/singlestoredb-studio/studio.hcl
+RUN chown -R singlestore:singlestore /var/lib/singlestoredb-studio
+
+USER singlestore
+
+ADD scripts/init.sh /scripts/init.sh
+RUN /scripts/init.sh
+
+ADD scripts/start.sh /scripts/start.sh
+CMD ["/scripts/start.sh"]
 
 ADD licenses /licenses
 
-ADD healthcheck.sh /healthcheck.sh
-HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD /healthcheck.sh
+ADD scripts/healthcheck.sh /scripts/healthcheck.sh
+HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD /scripts/healthcheck.sh
 
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp
