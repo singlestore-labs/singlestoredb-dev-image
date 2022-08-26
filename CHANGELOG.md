@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.5] - 2022-08-26
+
+ - Support upgrading using a persistent volume
+
 ## [0.0.4] - 2022-08-25
 
  - Added more documentation to the readme
