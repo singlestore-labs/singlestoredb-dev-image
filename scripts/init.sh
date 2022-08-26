@@ -26,6 +26,9 @@ memsqlctl -y update-config --all --key minimum_core_count --value 0
 memsqlctl -y update-config --all --key minimum_memory_mb --value 0
 memsqlctl -y update-config --memsql-id ${MASTER_ID} --key http_proxy_port --value 9000
 
+# this config is required for the cluster to upgrade since we aren't using toolbox
+memsqlctl -y update-config --all --key unmanaged_cluster --value true
+
 memsqlctl -y start-node --all
 
 memsqlctl -y change-root-password --all --password "${INIT_PW}"

@@ -188,7 +188,6 @@ test_volumes() {
     docker_run -v ${VOLUME_ID}:/data
 
     COUNT_AFTER_RECREATE=$(query_master "select count(*) from test.foo")
-
     if [[ "${COUNT}" != "${COUNT_AFTER_RECREATE}" ]]; then
         echo "Count differs after recreate"
         echo ${COUNT}
@@ -340,17 +339,42 @@ test_exit_status() {
 }
 TESTS+=("test_exit_status")
 
-test_upgrade_from_ciab() {
-    echo "TODO"
-
-    # this test should verify that we can safely upgrade from a cluster in a box image
-}
-TESTS+=("test_upgrade_from_ciab")
-
+# this test should verify that we can safely upgrade from the latest version of this image
 test_upgrade() {
-    echo "TODO"
+    VOLUME_ID=$(docker volume create)
 
-    # this test should verify that we can safely upgrade from a previous version of this image
+    # run the latest version of the image
+    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:latest
+    CURRENT_CONTAINER_ID=$(
+        docker run -d \
+            -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \
+            -e ROOT_PASSWORD=test \
+            -v ${VOLUME_ID}:/data \
+            ghcr.io/singlestore-labs/singlestoredb-dev:latest
+    )
+    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+
+    # create a database and table
+    query_master "create database test"
+    query_master "create table test.foo (id int)"
+    query_master "insert into test.foo (id) values (1)"
+    COUNT=$(query_master "select count(*) from test.foo")
+
+    # stop and remove the container
+    cleanup_container
+
+    # run the current version of the image
+    docker_run -v ${VOLUME_ID}:/data
+    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+
+    # verify that the database and table still exist
+    COUNT_AFTER_RECREATE=$(query_master "select count(*) from test.foo")
+    if [[ "${COUNT}" != "${COUNT_AFTER_RECREATE}" ]]; then
+        echo "Count differs after recreate"
+        echo ${COUNT}
+        echo ${COUNT_AFTER_RECREATE}
+        exit 1
+    fi
 }
 TESTS+=("test_upgrade")
 

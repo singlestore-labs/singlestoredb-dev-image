@@ -19,12 +19,6 @@ LOG_FILES=(
     "/var/lib/singlestoredb-studio/studio.log"
 )
 
-# detect data mount in old location to provide backwards compat with cluster-in-a-box
-if [[ -d /var/lib/memsql ]]; then
-    # replace /data with /var/lib/memsql in /etc/memsql/memsqlctl.hcl
-    sed -i "s#/data#/var/lib/memsql#g" /etc/memsql/memsqlctl.hcl
-fi
-
 # initialize /data directory from /startup/data.tgz if /data/nodes.hcl is missing
 if [[ ! -f /data/nodes.hcl ]]; then
     tar -xzf /startup/data.tgz -C /data
