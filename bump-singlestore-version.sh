@@ -27,7 +27,7 @@ fi
 NEW_CONFIG=$(jq ".${TAG}.server=\"${SINGLESTORE_VERSION}\"" config.json)
 echo ${NEW_CONFIG} | jq . >config.json
 
-PREV_CHANGELOG=$(tail -n +2 CHANGELOG.md)
+PREV_CHANGELOG=$(tail -n +3 CHANGELOG.md)
 
 VERSION_NAME="SingleStoreDB Cloud Version"
 if [[ "$TAG" == "onprem" ]]; then
@@ -39,7 +39,22 @@ cat >CHANGELOG.md <<EOF
 
 ## ${IMAGE_VERSION} - $(date "+%F")
 
- - ${VERSION_NAME} ${SINGLESTORE_VERSION}
+ - ${VERSION_NAME} = ${SINGLESTORE_VERSION}
 
 ${PREV_CHANGELOG}
+EOF
+
+cat <<EOF
+
+Updated config.json and CHANGELOG.md
+
+!! Make sure to sanity check both files !!
+
+Then run:
+
+    git add config.json CHANGELOG.md
+    git commit -m "Release ${IMAGE_VERSION}"
+    git tag v${IMAGE_VERSION}
+    git push origin main
+    git push origin v${IMAGE_VERSION}
 EOF
