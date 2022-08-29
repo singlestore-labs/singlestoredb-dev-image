@@ -24,16 +24,13 @@ RUN wget --no-check-certificate https://raw.githubusercontent.com/stedolan/jq/ma
     rm -f /tmp/jq-linux64
 
 ARG BOOTSTRAP_LICENSE
-ARG RELEASE_CHANNEL
-ARG CLIENT_VERSION
-ARG SERVER_VERSION
-ARG STUDIO_VERSION
+ARG CONFIG
 
-RUN yum-config-manager --add-repo https://release.memsql.com/${RELEASE_CHANNEL}/rpm/x86_64/repodata/memsql.repo && \
+RUN yum-config-manager --add-repo https://release.memsql.com/$(echo "${CONFIG}" | jq -r .channel)/rpm/x86_64/repodata/memsql.repo && \
     yum install -y \
-    singlestore-client-${CLIENT_VERSION} \
-    singlestoredb-server${SERVER_VERSION} \
-    singlestoredb-studio-${STUDIO_VERSION} && \
+    singlestore-client-$(echo "${CONFIG}" | jq -r .client) \
+    singlestoredb-server$(echo "${CONFIG}" | jq -r .server) \
+    singlestoredb-studio-$(echo "${CONFIG}" | jq -r .studio) && \
     yum clean all
 
 ADD scripts/setup-singlestore-user.sh /scripts/setup-singlestore-user.sh

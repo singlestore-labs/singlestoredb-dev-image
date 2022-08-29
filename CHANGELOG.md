@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.6] - 2022-08-29
+
+ - Split the image into two tags, one tracking SingleStoreDB On-Premises (`onprem`) and the other tracking SingleStoreDB Cloud (`cloud`). The changelog will track the version numbers for each image tag going forward.
+
+| Tag Suffix | SingleStoreDB Version |
+| ---------- | --------------------- |
+| `cloud`    | 7.9.8                 |
+| `onprem`   | 7.8.13                |
+
 ## [0.0.5] - 2022-08-26
 
  - Support upgrading using a persistent volume

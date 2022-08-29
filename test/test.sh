@@ -13,13 +13,19 @@ if [[ -z "${SINGLESTORE_LICENSE}" ]]; then
     exit 1
 fi
 
-IMAGE="${1}"
+IMAGE="${1-}"
 if [[ -z "${IMAGE}" ]]; then
-    echo "Usage: ./test.sh <image> [<test filter>]"
+    echo "Usage: ./test.sh <image> <cloud|onprem> [<test filter>]"
     exit 1
 fi
 
-TEST_FILTER="${2-}"
+CHANNEL="${2-}"
+if [[ "$CHANNEL" != "cloud" && "$CHANNEL" != "onprem" ]]; then
+    echo "Usage: ./test.sh <image> <cloud|onprem> [<test filter>]"
+    exit 1
+fi
+
+TEST_FILTER="${3-}"
 
 wait_for_healthy() {
     local container="${1}"
@@ -344,7 +350,11 @@ test_upgrade() {
     VOLUME_ID=$(docker volume create)
 
     # run the latest version of the image
-    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:latest
+    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:${CHANNEL} || {
+        echo "Skipping upgrade test - failed to pull latest image for channel"
+        return 0
+    }
+
     CURRENT_CONTAINER_ID=$(
         docker run -d \
             -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \

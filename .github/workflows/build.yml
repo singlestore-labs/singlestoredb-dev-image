@@ -9,6 +9,9 @@ env:
 jobs:
   build-and-test-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        channel: [cloud, onprem]
 
     steps:
       - name: Checkout source
@@ -25,7 +28,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: cat config.env >> ${GITHUB_ENV}
+        run: echo "CONFIG="$(jq -c .${{ matrix.channel }} config.json)"" >> ${GITHUB_ENV}
 
       - name: Build image for testing
         uses: docker/build-push-action@v3
@@ -39,14 +42,11 @@ jobs:
             singlestore-labs/singlestoredb-dev
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
-            RELEASE_CHANNEL=${{ env.RELEASE_CHANNEL }}
-            SERVER_VERSION=${{ env.SERVER_VERSION }}
-            CLIENT_VERSION=${{ env.CLIENT_VERSION }}
-            STUDIO_VERSION=${{ env.STUDIO_VERSION }}
+            CONFIG=${{ env.CONFIG }}
 
       - name: run tests
         run: |
-          ./test/test.sh singlestore-labs/singlestoredb-dev
+          ./test/test.sh singlestore-labs/singlestoredb-dev ${{ matrix.channel }}
 
       - name: Anchore Container Scan
         uses: anchore/scan-action@v3
@@ -57,8 +57,14 @@ jobs:
   publish-image:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        channel: [cloud, onprem]
+
     needs:
       - build-and-test-image
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -74,7 +80,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: cat config.env >> ${GITHUB_ENV}
+        run: echo "CONFIG="$(jq -c .${{ matrix.channel }} config.json)"" >> ${GITHUB_ENV}
 
       - name: Docker meta
         id: meta
@@ -83,8 +89,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
             ghcr.io/singlestore-labs/singlestoredb-dev
+          flavor: |
+            latest=false
           tags: |
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},suffix=-${{ matrix.channel }}
+            type=raw,value=${{ matrix.channel }}
+            type=raw,value=latest,enable=${{ matrix.channel == 'cloud' }}
           labels: |
             org.opencontainers.image.vendor=SingleStore
 
@@ -99,19 +109,20 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
-            RELEASE_CHANNEL=${{ env.RELEASE_CHANNEL }}
-            SERVER_VERSION=${{ env.SERVER_VERSION }}
-            CLIENT_VERSION=${{ env.CLIENT_VERSION }}
-            STUDIO_VERSION=${{ env.STUDIO_VERSION }}
+            CONFIG=${{ env.CONFIG }}
 
   test-service:
     runs-on: ubuntu-latest
     needs:
       - publish-image
 
+    strategy:
+      matrix:
+        channel: [cloud, onprem]
+
     services:
       singlestoredb:
-        image: ghcr.io/singlestore-labs/singlestoredb-dev:latest
+        image: ghcr.io/singlestore-labs/singlestoredb-dev:${{ matrix.channel }}-latest
         ports:
           - 3306:3306
           - 8080:8080

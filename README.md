@@ -1,10 +1,11 @@
-# SingleStoreDB Dev Container <!-- omit in toc -->
+# SingleStoreDB Dev Image <!-- omit in toc -->
 
-The SingleStoreDB Dev Container is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment. This container is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
+The SingleStoreDB Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment. This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
 
 If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums][forums].
 
-- [How to run the container using Docker?](#how-to-run-the-container-using-docker)
+- [How to run the Docker image?](#how-to-run-the-docker-image)
+- [How to pick a version number?](#how-to-pick-a-version-number)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
 - [How to access the Data API?](#how-to-access-the-data-api)
@@ -13,7 +14,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How do use this container in a CI/CD environment?](#how-do-use-this-container-in-a-cicd-environment)
   - [Github Actions](#github-actions)
 
-## How to run the container using Docker?
+## How to run the Docker image?
 
 [Sign up][try-free] for a free SingleStore license. This allows you to run up to 4 nodes up to 32 gigs each for free. Grab your license key from [SingleStore portal][portal] to use in the docker run command below.
 
@@ -31,6 +32,19 @@ docker run \
 
 > **Note**
 > The `--platform` flag is only needed to enable support with the new Mac M1 or M2 chipset (Apple Silicon). You can safely remove or ignore that flag on amd64 compatible hardware.
+
+## How to pick a version number?
+
+The SingleStoreDB Dev Image uses Docker Image tags to track different versions of the product. Currently there are two groups of tags connected to the Cloud and On-Premises versions of the product. You can see a listing of recent versions on the [Github package page][versions].
+
+The version number in the image tag **is not related to the SingleStoreDB version** contained within the image. It is the version of the image itself and does not provide any backwards compatibility guarantees between any two version numbers. Refer to the [changelog][changelog] to see precisely which SingleStoreDB versions are included in each image tag.
+
+The tags ending in `-cloud` follow the versions supported by SingleStore Cloud. The tags ending in `-onprem` follow the versions supported by SingleStore On-Premises.
+
+**For example**, if you wanted to use SingleStoreDB 7.8.13, you would use the image `ghcr.io/singlestore-labs/singlestoredb-dev:0.0.6-onprem`
+
+> **Note**
+> The latest tag points to the latest Cloud version as it is released more frequently than our On-Premises version. There are also top level `cloud` and `onprem` tags which you can use to always run the latest version.
 
 ## How to open a SQL shell?
 
@@ -124,7 +138,6 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
-
 
 ## How do use this container in a CI/CD environment?
 

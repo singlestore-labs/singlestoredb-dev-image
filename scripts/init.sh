@@ -38,6 +38,7 @@ memsqlctl -y bootstrap-aggregator --memsql-id ${MASTER_ID} --host 127.0.0.1
 memsqlctl -y add-leaf --host 127.0.0.1 --port 3307 --password ${INIT_PW}
 
 memsqlctl -y update-config --all --set-global --key enable_external_functions --value on
+memsqlctl -y update-config --all --set-global --key http_api --value on
 
 # stop the nodes to ensure we have a clean image state
 memsqlctl -y stop-node --all
