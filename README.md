@@ -21,7 +21,7 @@ We recommend using an explicit image version tag whenever possible. You can find
 
 ```bash
 docker run \
-    -d --name singlestore-dev \
+    -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     --platform linux/amd64 \
@@ -37,13 +37,13 @@ docker run \
 The image includes a shell which you can run interactively using `docker exec` like so:
 
 ```bash
-docker exec -it singlestore-dev singlestore -p
+docker exec -it singlestoredb-dev singlestore -p
 ```
 
 The above command will prompt you for the root password. You can also provide the root password at the command line immediately after the `-p` flag like so:
 
 ```bash
-docker exec -it singlestore-dev singlestore -pYOUR_ROOT_PASSWORD
+docker exec -it singlestoredb-dev singlestore -pYOUR_ROOT_PASSWORD
 ```
 
 You can also connect to SingleStore using any MySQL compatible client on your own machine using the following connection details:
@@ -89,7 +89,7 @@ You can use a Docker volume to setup persistent storage by mounting the volume t
 
 ```bash
 docker run \
-    -d --name singlestore-dev \
+    -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
@@ -112,7 +112,7 @@ One way to do this is mounting a `init.sql` from your machine into the container
 
 ```bash
 docker run \
-    -d --name singlestore-dev \
+    -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
