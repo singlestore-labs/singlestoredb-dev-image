@@ -2,8 +2,6 @@
 set -euo pipefail
 
 CHANNEL="${1:-cloud}"
-
-# error if CHANNEL is not cloud or onprem
 if [[ "$CHANNEL" != "cloud" && "$CHANNEL" != "onprem" ]]; then
     echo "Invalid channel: $CHANNEL; must be cloud or onprem"
     exit 1
