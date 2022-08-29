@@ -360,7 +360,7 @@ test_upgrade() {
             -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \
             -e ROOT_PASSWORD=test \
             -v ${VOLUME_ID}:/data \
-            ghcr.io/singlestore-labs/singlestoredb-dev:latest
+            ghcr.io/singlestore-labs/singlestoredb-dev:${CHANNEL}
     )
     wait_for_healthy ${CURRENT_CONTAINER_ID} 30
 
