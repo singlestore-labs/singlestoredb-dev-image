@@ -2,17 +2,19 @@
 
 The SingleStoreDB Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment. This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
 
-If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums][forums].
+If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums].
 
 - [How to run the Docker image?](#how-to-run-the-docker-image)
-- [How to pick a version number?](#how-to-pick-a-version-number)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
 - [How to access the Data API?](#how-to-access-the-data-api)
+- [Where to go from here?](#where-to-go-from-here)
+- [How to pick an image tag (or SingleStoreDB version)?](#how-to-pick-an-image-tag-or-singlestoredb-version)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How do use this container in a CI/CD environment?](#how-do-use-this-container-in-a-cicd-environment)
   - [Github Actions](#github-actions)
+- [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 
 ## How to run the Docker image?
 
@@ -32,19 +34,6 @@ docker run \
 
 > **Note**
 > The `--platform` flag is only needed to enable support with the new Mac M1 or M2 chipset (Apple Silicon). You can safely remove or ignore that flag on amd64 compatible hardware.
-
-## How to pick a version number?
-
-The SingleStoreDB Dev Image uses Docker Image tags to track different versions of the product. Currently there are two groups of tags connected to the Cloud and On-Premises versions of the product. You can see a listing of recent versions on the [Github package page][versions].
-
-The version number in the image tag **is not related to the SingleStoreDB version** contained within the image. It is the version of the image itself and does not provide any backwards compatibility guarantees between any two version numbers. Refer to the [changelog][changelog] to see precisely which SingleStoreDB versions are included in each image tag.
-
-The tags ending in `-cloud` follow the versions supported by SingleStore Cloud. The tags ending in `-onprem` follow the versions supported by SingleStore On-Premises.
-
-**For example**, if you wanted to use SingleStoreDB 7.8.13, you would use the image `ghcr.io/singlestore-labs/singlestoredb-dev:0.0.6-onprem`
-
-> **Note**
-> The latest tag points to the latest Cloud version as it is released more frequently than our On-Premises version. There are also top level `cloud` and `onprem` tags which you can use to always run the latest version.
 
 ## How to open a SQL shell?
 
@@ -95,7 +84,27 @@ In addition to supporting the MySQL Protocol, SingleStore also has a JSON over H
 ```
 
 > **Note**
-> For more information on how to use the Data API please [visit our documentation.][data-api]
+> For more information on how to use the Data API please [visit the documentation.][data-api]
+
+## Where to go from here?
+
+Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
+
+ * [Connect to SingleStore](https://docs.singlestore.com/db/latest/en/connect-to-your-cluster.html)
+ * [Developer Resources](https://docs.singlestore.com/db/latest/en/developer-resources.html)
+ * [Integrations](https://docs.singlestore.com/db/latest/en/integrate-with-singlestoredb.html)
+ * [Load Data](https://docs.singlestore.com/db/latest/en/load-data.html)
+
+## How to pick an image tag (or SingleStoreDB version)?
+
+The SingleStoreDB Dev Image uses Docker Image tags to track different versions of the product. Currently there are two groups of tags related to the Cloud and On-Premises versions of the product. You can see a listing of recent versions on the [Github package page][versions].
+
+To run a particular version of SingleStoreDB, look up the version in the [changelog] to find the corresponding Docker Image tag to use. If the version is only released in SingleStoreDB Cloud, then you will need to append the suffix `-cloud`. Otherwise you should use the suffix `-onprem`.
+
+**For example**, if you wanted to use SingleStoreDB 7.8.13, you would use the image `ghcr.io/singlestore-labs/singlestoredb-dev:0.0.6-onprem`
+
+> **Note**
+> The latest tag points to the latest Cloud version as it is released more frequently than our On-Premises version. There are also standalone `cloud` and `onprem` tags which you can use to always run the latest version following their respective products.
 
 ## How to use Docker volumes for persistent storage?
 
@@ -120,7 +129,7 @@ You can also persist log files by mounting a volume to `/logs`.
 
 ## How to initialize this container with a SQL file?
 
-When this docker image starts for the first time it will check to see if `/init.sql` exists in it's filesystem. If `/init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
+When this docker image starts for the first time it will check to see if `/init.sql` exists in its filesystem. If `/init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
 
 One way to do this is mounting a `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
 
@@ -172,6 +181,29 @@ jobs:
         run: |
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
 ```
+
+## How to upgrade from `singlestore/cluster-in-a-box`?
+
+Before this image existed, there was another Docker Image called `singlestore/cluster-in-a-box`. The docker run command for the previous image looked something like this:
+
+```bash
+docker run -i --init \
+    --name singlestore-ciab \
+    -e LICENSE_KEY=${LICENSE_KEY} \
+    -e ROOT_PASSWORD=${ROOT_PASSWORD} \
+    -p 3306:3306 -p 8080:8080 \
+    singlestore/cluster-in-a-box
+```
+
+The differences between the old image and the new image are the following:
+
+ * The image no longer needs to be initialized before you can use it
+ * Startup time is much better - roughly 5 seconds with the new image versus a minute with the old image
+ * The [Data API][data-api] and External Functions features are enabled by default
+ * Upgrade between versions is supported and tested (downgrade is not supported)
+ * The new image is distributed through the Github Container Repository rather than the Docker Hub
+
+In all cases we recommend using the new image unless you need to run a older version of SingleStore which has not been released in `singlestoredb-dev-image`.
 
 [versions]: https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
 [changelog]: CHANGELOG.md
