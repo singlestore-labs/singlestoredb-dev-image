@@ -1,6 +1,11 @@
 name: build
 
-on: push
+on:
+  push:
+    paths-ignore:
+      - "CHANGELOG.md"
+      - "LICENSE"
+      - "README.md"
 
 env:
   BOOTSTRAP_LICENSE: ${{ secrets.BOOTSTRAP_LICENSE }}
