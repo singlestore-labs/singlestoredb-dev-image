@@ -109,7 +109,7 @@ To run a particular version of SingleStoreDB, look up the version in the [change
 
 ## How to use Docker volumes for persistent storage?
 
-You can use a Docker volume to setup persistent storage by mounting the volume to `/data` in the container. You can do this by simply adding `-v VOLUME_NAME:/data` or `-v /data` to the Docker run command. Make sure to replace `VOLUME_NAME` with a name for the volume.
+You can use a Docker volume to set up persistent storage by mounting the volume to `/data` in the container. You can do this by simply adding `-v VOLUME_NAME:/data` or `-v /data` to the Docker run command. Make sure to replace `VOLUME_NAME` with a name for the volume.
 
 ```bash
 docker run \
