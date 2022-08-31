@@ -34,7 +34,7 @@ docker run \
 ```
 
 > **Note**
-> The `--platform` flag is only needed to enable support with the new Mac M1 or M2 chipset (Apple Silicon). You can safely remove or ignore that flag on amd64 compatible hardware.
+> The `--platform` flag is only needed to enable support with the new Mac M1 or M2 chipset (Apple Silicon). You can safely remove or ignore that flag on x86_64 (amd64) compatible hardware such as most Intel and AMD chips.
 
 ## How to open a SQL shell?
 
