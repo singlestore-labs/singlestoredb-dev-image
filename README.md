@@ -13,7 +13,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to pick an image tag (or SingleStoreDB version)?](#how-to-pick-an-image-tag-or-singlestoredb-version)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
-- [How do use this container in a CI/CD environment?](#how-do-use-this-container-in-a-cicd-environment)
+- [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
   - [Github Actions](#github-actions)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 
@@ -149,7 +149,7 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
 
-## How do use this container in a CI/CD environment?
+## How to use this container in a CI/CD environment?
 
 This Docker image defines a healthcheck which runs every 5 seconds. Any CI/CD system or container runtime which respects the healthcheck should automatically wait for SingleStore to be running and healthy.
 
