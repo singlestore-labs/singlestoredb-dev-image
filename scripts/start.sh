@@ -41,16 +41,17 @@ memsqlctl -jy change-root-password --all --password "${ROOT_PASSWORD}"
 # set the correct license
 memsqlctl -jy set-license --license "${SINGLESTORE_LICENSE}"
 
-# start studio
-singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
-STUDIO_PID=$!
-
 # run init.sql if it exists (and we haven't already run it)
 if [[ -f /init.sql && ! -f /data/.init.sql.done ]]; then
     echo "Running init.sql..."
     singlestore -p${ROOT_PASSWORD} </init.sql
     touch /data/.init.sql.done
 fi
+
+# start studio last, this also allows studio to double purpose as a network accessible "ready" indicator
+# which is useful for CI/CD environments which don't respect the Docker HEALTHCHECK
+singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
+STUDIO_PID=$!
 
 touch /startup/.ready
 

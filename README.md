@@ -15,6 +15,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
   - [Github Actions](#github-actions)
+  - [Gitlab CI/CD](#gitlab-cicd)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 
 ## How to run the Docker image?
@@ -181,6 +182,38 @@ jobs:
       - name: sanity check using mysql client
         run: |
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
+```
+
+### Gitlab CI/CD
+
+Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately Gitlab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [three year old issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in Gitlab, so hopefully this can be simplified eventually.
+
+> **Note**
+> Make sure you add your SingleStore license key to Gitlab secrets under the key `SINGLESTORE_LICENSE`.
+
+```yaml
+image: debian
+
+stages:
+  - test
+
+variables:
+    ROOT_PASSWORD: test
+    SINGLESTORE_LICENSE: $SINGLESTORE_LICENSE
+
+testing:
+  stage: test
+  services:
+    - name: ghcr.io/singlestore-labs/singlestoredb-dev:latest
+      alias: singlestoredb-dev
+  script:
+    - apt update
+    - apt install -y mariadb-client curl
+    - curl -sI localhost:8080 --retry 30 --retry-connrefused --retry-delay 1
+    - mysql -u root -ptest -h singlestoredb-dev -e "create database foo"
+    - mysql -u root -ptest -h singlestoredb-dev -e "create table foo.bar (id int)"
+    - mysql -u root -ptest -h singlestoredb-dev -e "insert into foo.bar values (1),(2),(3)"
+    - mysql -u root -ptest -h singlestoredb-dev -e "select * from foo.bar"
 ```
 
 ## How to upgrade from `singlestore/cluster-in-a-box`?
