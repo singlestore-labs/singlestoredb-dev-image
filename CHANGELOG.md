@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7 - 2022-09-01
+
+ - Moved Studio later in the startup process so it can be used as a backup healthcheck
+
 ## 0.0.6 - 2022-08-29
 
  - Split the image into two tags, one tracking SingleStoreDB On-Premises (`onprem`) and the other tracking SingleStoreDB Cloud (`cloud`). The changelog will track the version numbers for each image tag going forward.
