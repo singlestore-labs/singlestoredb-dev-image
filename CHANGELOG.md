@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.8 - 2022-09-07
+
+ - Removed the -cloud and -onprem tags, replacing it with a method to support switching the SingleStoreDB version at runtime or by building a custom image.
+ - Added toolbox (v1.13.10) to the image to support the dynamic version switching behavior
+ - Updated readme with more details on mount points, version selection, and Apple Silicon behavior
+
 ## 0.0.7 - 2022-09-01
 
  - Moved Studio later in the startup process so it can be used as a backup healthcheck

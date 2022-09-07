@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CHANNEL="${1:-cloud}"
-if [[ "$CHANNEL" != "cloud" && "$CHANNEL" != "onprem" ]]; then
-    echo "Invalid channel: $CHANNEL; must be cloud or onprem"
-    exit 1
-fi
-
 if [[ -f .env ]]; then
     source .env
 fi
@@ -21,7 +15,7 @@ IMAGE_REPO=ghcr.io/singlestore-labs
 IMAGE_NAME=singlestoredb-dev
 
 docker build \
-    -t "${IMAGE_REPO}/${IMAGE_NAME}:${CHANNEL}-local" \
+    -t "${IMAGE_REPO}/${IMAGE_NAME}:local" \
     --build-arg BOOTSTRAP_LICENSE=${BOOTSTRAP_LICENSE} \
-    --build-arg CONFIG="$(jq .${CHANNEL} config.json)" \
+    --build-arg CONFIG="$(cat config.json)" \
     .

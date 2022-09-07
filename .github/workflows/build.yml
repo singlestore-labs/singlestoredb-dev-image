@@ -14,9 +14,6 @@ env:
 jobs:
   build-and-test-image:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        channel: [cloud, onprem]
 
     steps:
       - name: Checkout source
@@ -33,7 +30,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: echo "CONFIG="$(jq -c .${{ matrix.channel }} config.json)"" >> ${GITHUB_ENV}
+        run: echo "CONFIG="$(cat config.json)"" >> ${GITHUB_ENV}
 
       - name: Build image for testing
         uses: docker/build-push-action@v3
@@ -51,7 +48,7 @@ jobs:
 
       - name: run tests
         run: |
-          ./test/test.sh singlestore-labs/singlestoredb-dev ${{ matrix.channel }}
+          ./test/test.sh singlestore-labs/singlestoredb-dev
 
       - name: Anchore Container Scan
         uses: anchore/scan-action@v3
@@ -62,10 +59,6 @@ jobs:
   publish-image:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        channel: [cloud, onprem]
 
     needs:
       - build-and-test-image
@@ -85,7 +78,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: echo "CONFIG="$(jq -c .${{ matrix.channel }} config.json)"" >> ${GITHUB_ENV}
+        run: echo "CONFIG="$(cat config.json)"" >> ${GITHUB_ENV}
 
       - name: Docker meta
         id: meta
@@ -94,12 +87,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
             ghcr.io/singlestore-labs/singlestoredb-dev
-          flavor: |
-            latest=false
           tags: |
-            type=semver,pattern={{version}},suffix=-${{ matrix.channel }}
-            type=raw,value=${{ matrix.channel }}
-            type=raw,value=latest,enable=${{ matrix.channel == 'cloud' }}
+            type=semver,pattern={{version}}
           labels: |
             org.opencontainers.image.vendor=SingleStore
 
@@ -121,13 +110,9 @@ jobs:
     needs:
       - publish-image
 
-    strategy:
-      matrix:
-        channel: [cloud, onprem]
-
     services:
       singlestoredb:
-        image: ghcr.io/singlestore-labs/singlestoredb-dev:${{ matrix.channel }}
+        image: ghcr.io/singlestore-labs/singlestoredb-dev:latest
         ports:
           - 3306:3306
           - 8080:8080

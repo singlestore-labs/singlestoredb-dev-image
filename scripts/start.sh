@@ -19,9 +19,19 @@ LOG_FILES=(
     "/var/lib/singlestoredb-studio/studio.log"
 )
 
-# initialize /data directory from /startup/data.tgz if /data/nodes.hcl is missing
+# initialize /data directory from /server/data.tgz if /data/nodes.hcl is missing
 if [[ ! -f /data/nodes.hcl ]]; then
-    tar -xzf /startup/data.tgz -C /data
+    tar -xzf /server/data.tgz -C /data
+fi
+
+# check to see if we need to switch versions at runtime
+if [ -n "${SINGLESTORE_VERSION-}" ]; then
+    CURRENT_VERSION=$(memsqlctl -j version | jq -r '"\(.version)-\(.commitHash[0:10])"')
+    TARGET_VERSION="${SINGLESTORE_VERSION%%:*}"
+    if [ "${CURRENT_VERSION}" != "${TARGET_VERSION}" ]; then
+        echo "Switching SingleStore version from '${CURRENT_VERSION}' to '${TARGET_VERSION}'"
+        /scripts/switch-version.sh "${SINGLESTORE_VERSION}" "${SINGLESTORE_LICENSE}"
+    fi
 fi
 
 # start the nodes
@@ -53,7 +63,7 @@ fi
 singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
 STUDIO_PID=$!
 
-touch /startup/.ready
+touch /server/.ready
 
 # tail the logs
 tail --pid ${MASTER_PID} --pid ${LEAF_PID} -F $(printf '%s ' "${LOG_FILES[@]}") &

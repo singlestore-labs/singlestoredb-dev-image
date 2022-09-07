@@ -1,4 +1,4 @@
-FROM almalinux:8.6-20220706
+FROM almalinux:8.6-20220901
 
 RUN yum makecache --refresh && \
     yum install -y yum-utils wget procps && \
@@ -29,16 +29,16 @@ ARG CONFIG
 RUN yum-config-manager --add-repo https://release.memsql.com/$(echo "${CONFIG}" | jq -r .channel)/rpm/x86_64/repodata/memsql.repo && \
     yum install -y \
     singlestore-client-$(echo "${CONFIG}" | jq -r .client) \
-    singlestoredb-server$(echo "${CONFIG}" | jq -r .server) \
+    singlestoredb-toolbox-$(echo "${CONFIG}" | jq -r .toolbox) \
     singlestoredb-studio-$(echo "${CONFIG}" | jq -r .studio) && \
     yum clean all
 
 ADD scripts/setup-singlestore-user.sh /scripts/setup-singlestore-user.sh
 RUN /scripts/setup-singlestore-user.sh
 
+RUN mkdir -p /server && chown -R singlestore:singlestore /server
 RUN mkdir -p /data && chown -R singlestore:singlestore /data
 RUN mkdir -p /logs && chown -R singlestore:singlestore /logs
-RUN mkdir -p /startup && chown -R singlestore:singlestore /startup
 
 # remove /var/lib/memsql, this image uses /data and /logs to store everything
 # we also need to be able to detect when we are upgrading from the old cluster in a box image
@@ -54,8 +54,21 @@ RUN chown -R singlestore:singlestore /var/lib/singlestoredb-studio
 
 USER singlestore
 
+RUN sdb-toolbox-config -y register-host \
+    --localhost \
+    --cluster-hostname 127.0.0.1 \
+    --skip-auto-config \
+    --memsqlctl-config-path /etc/memsql/memsqlctl.hcl \
+    --tar-install-dir /server
+
+ADD scripts/install.sh /scripts/install.sh
+RUN /scripts/install.sh "$(echo "${CONFIG}" | jq -r .channel):$(echo "${CONFIG}" | jq -r .server)"
+
 ADD scripts/init.sh /scripts/init.sh
-RUN /scripts/init.sh
+RUN /scripts/init.sh "${BOOTSTRAP_LICENSE}"
+
+ADD scripts/switch-version.sh /scripts/switch-version.sh
+ADD scripts/memsqlctl /bin/memsqlctl
 
 ADD scripts/start.sh /scripts/start.sh
 CMD ["/scripts/start.sh"]
@@ -63,7 +76,7 @@ CMD ["/scripts/start.sh"]
 ADD licenses /licenses
 
 ADD scripts/healthcheck.sh /scripts/healthcheck.sh
-HEALTHCHECK --interval=7s --timeout=30s --start-period=5s --retries=3 CMD /scripts/healthcheck.sh
+HEALTHCHECK --interval=5s --timeout=5s --start-period=90s --retries=3 CMD /scripts/healthcheck.sh
 
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp

@@ -15,17 +15,11 @@ fi
 
 IMAGE="${1-}"
 if [[ -z "${IMAGE}" ]]; then
-    echo "Usage: ./test.sh <image> <cloud|onprem> [<test filter>]"
+    echo "Usage: ./test.sh <image> [<test filter>]"
     exit 1
 fi
 
-CHANNEL="${2-}"
-if [[ "$CHANNEL" != "cloud" && "$CHANNEL" != "onprem" ]]; then
-    echo "Usage: ./test.sh <image> <cloud|onprem> [<test filter>]"
-    exit 1
-fi
-
-TEST_FILTER="${3-}"
+TEST_FILTER="${2-}"
 
 wait_for_healthy() {
     local container="${1}"
@@ -70,7 +64,7 @@ docker_run() {
             ${IMAGE}
     )
 
-    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+    wait_for_healthy ${CURRENT_CONTAINER_ID} 90
 }
 
 docker_exec() {
@@ -350,8 +344,8 @@ test_upgrade() {
     VOLUME_ID=$(docker volume create)
 
     # run the latest version of the image
-    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:${CHANNEL} || {
-        echo "Skipping upgrade test - failed to pull latest image for channel"
+    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:latest || {
+        echo "Skipping upgrade test - failed to pull latest image"
         return 0
     }
 
@@ -360,7 +354,7 @@ test_upgrade() {
             -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \
             -e ROOT_PASSWORD=test \
             -v ${VOLUME_ID}:/data \
-            ghcr.io/singlestore-labs/singlestoredb-dev:${CHANNEL}
+            ghcr.io/singlestore-labs/singlestoredb-dev:latest
     )
     wait_for_healthy ${CURRENT_CONTAINER_ID} 30
 
@@ -387,6 +381,19 @@ test_upgrade() {
     fi
 }
 TESTS+=("test_upgrade")
+
+# this test should verify that we can switch the version at runtime
+test_switch_version() {
+    local target_version=7.8.13
+    docker_run -e SINGLESTORE_VERSION=${target_version}
+
+    local version=$(query_master "select @@memsql_version" | jq -r '.rows[0]."@@memsql_version"')
+    if [[ "${version}" != "${target_version}" ]]; then
+        echo "Version is ${version} instead of ${target_version}"
+        exit 1
+    fi
+}
+TESTS+=("test_switch_version")
 
 run_test() {
     echo "Running ${1}..."

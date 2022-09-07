@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-if [[ ! -f /startup/.ready ]]; then
+if [[ ! -f /server/.ready ]]; then
     echo "The start script has not completed yet"
     exit 1
 fi

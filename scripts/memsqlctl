@@ -1,0 +1,3 @@
+#!/bin/bash
+BIN=$(sdb-toolbox-config describe-host -j | jq -r .memsqlctlPath)
+exec "${BIN}" "${@}"

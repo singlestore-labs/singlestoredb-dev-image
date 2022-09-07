@@ -1,14 +1,7 @@
 {
-  "cloud": {
-    "channel": "dev",
-    "server": "7.9.8-325fd05545",
-    "client": "1.0.7",
-    "studio": "4.0.7"
-  },
-  "onprem": {
-    "channel": "production",
-    "server": "7.8.13-f8fec5f0db",
-    "client": "1.0.7",
-    "studio": "4.0.7"
-  }
+  "channel": "dev",
+  "server": "7.9.8-325fd05545",
+  "toolbox": "1.13.10",
+  "client": "1.0.7",
+  "studio": "4.0.7"
 }

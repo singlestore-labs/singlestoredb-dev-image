@@ -8,15 +8,18 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to run the Docker image?](#how-to-run-the-docker-image)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
+- [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
 - [How to access the Data API?](#how-to-access-the-data-api)
-- [Where to go from here?](#where-to-go-from-here)
-- [How to pick an image tag (or SingleStoreDB version)?](#how-to-pick-an-image-tag-or-singlestoredb-version)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
+- [How to use a specific SingleStoreDB version?](#how-to-use-a-specific-singlestoredb-version)
+  - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
+  - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
   - [Github Actions](#github-actions)
   - [Gitlab CI/CD](#gitlab-cicd)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
+- [Apple Silicon (M1/M2 chips) performance notes](#apple-silicon-m1m2-chips-performance-notes)
 
 ## How to run the Docker image?
 
@@ -66,6 +69,15 @@ SingleStore Studio is a convenient way to manage SingleStoreDB and run queries v
 
 When opening Studio you will see a login screen. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
 
+## Where can I learn how to use SingleStoreDB?
+
+Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
+
+ * [Connect to SingleStore](https://docs.singlestore.com/db/latest/en/connect-to-your-cluster.html)
+ * [Developer Resources](https://docs.singlestore.com/db/latest/en/developer-resources.html)
+ * [Integrations](https://docs.singlestore.com/db/latest/en/integrate-with-singlestoredb.html)
+ * [Load Data](https://docs.singlestore.com/db/latest/en/load-data.html)
+
 ## How to access the Data API?
 
 In addition to supporting the MySQL Protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming you have forwarded port 9000 to your local machine, the following curl command demonstrates how you can use the Data API:
@@ -88,26 +100,6 @@ In addition to supporting the MySQL Protocol, SingleStore also has a JSON over H
 > **Note**
 > For more information on how to use the Data API please [visit the documentation.][data-api]
 
-## Where to go from here?
-
-Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
-
- * [Connect to SingleStore](https://docs.singlestore.com/db/latest/en/connect-to-your-cluster.html)
- * [Developer Resources](https://docs.singlestore.com/db/latest/en/developer-resources.html)
- * [Integrations](https://docs.singlestore.com/db/latest/en/integrate-with-singlestoredb.html)
- * [Load Data](https://docs.singlestore.com/db/latest/en/load-data.html)
-
-## How to pick an image tag (or SingleStoreDB version)?
-
-The SingleStoreDB Dev Image uses Docker Image tags to track different versions of the product. Currently there are two groups of tags related to the Cloud and On-Premises versions of the product. You can see a listing of recent versions on the [Github package page][versions].
-
-To run a particular version of SingleStoreDB, look up the version in the [changelog] to find the corresponding Docker Image tag to use. If the version is only released in SingleStoreDB Cloud, then you will need to append the suffix `-cloud`. Otherwise you should use the suffix `-onprem`.
-
-**For example**, if you wanted to use SingleStoreDB 7.8.13, you would use the image `ghcr.io/singlestore-labs/singlestoredb-dev:0.0.6-onprem`
-
-> **Note**
-> The latest tag points to the latest Cloud version as it is released more frequently than our On-Premises version. There are also standalone `cloud` and `onprem` tags which you can use to always run the latest version following their respective products.
-
 ## How to use Docker volumes for persistent storage?
 
 You can use a Docker volume to set up persistent storage by mounting the volume to `/data` in the container. You can do this by simply adding `-v VOLUME_NAME:/data` or `-v /data` to the Docker run command. Make sure to replace `VOLUME_NAME` with a name for the volume.
@@ -124,10 +116,16 @@ docker run \
 
 After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without loosing your data. Keep in mind that SingleStoreDB does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
 
-You can also persist log files by mounting a volume to `/logs`.
-
 > **Note**
-> In order to use a host volume with this image, you will need to chown the volume to UID=999 and GID=998 before mounting it to `/data` or `/logs`. The volume will be initialized automatically if empty.
+> In order to mount a host volume to the `/data` directory, you will need to chown the volume to UID=999 and GID=998 before mounting it. The volume will be initialized automatically if empty. Host volumes are only supported by the `/data` directory.
+
+This Docker image has a number of volume mount points in addition to `/data`. Here is a table outlining each of the mount points along with roughly their contents:
+
+| mount path | description                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| /data      | All of the data, config, and cache for the SingleStoreDB cluster.                                                  |
+| /logs      | All of the tracelog files containing information that can help debug the cluster or observe it's current behavior. |
+| /server    | The installation directory containing server binaries and other installation state.                                |
 
 ## How to initialize this container with a SQL file?
 
@@ -149,6 +147,47 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
+
+## How to use a specific SingleStoreDB version?
+
+The SingleStoreDB Dev Image uses the latest SingleStoreDB version available in the managed service by default. If you would prefer to use another SingleStoreDB version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
+
+### How to build a custom version of this Docker Image with a specific SingleStoreDB Version?
+
+The script `/scripts/switch-version.sh` can be used to easily build a custom version of this image. The fastest way to do this is using Docker build like so:
+
+```bash
+cat <<EOF | docker build -f - -t singlestoredb-dev:custom .
+FROM ghcr.io/singlestore-labs/singlestoredb-dev
+RUN /scripts/switch-version.sh SINGLESTORE_VERSION SINGLESTORE_LICENSE
+EOF
+```
+
+Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStoreDB installed and ready to use.
+
+### How to specify a SingleStoreDB version at runtime?
+
+In order to use a specific version of SingleStoreDB at runtime, you can start the Docker container with the `SINGLESTORE_VERSION` environment variable set.
+
+> **Warning**
+> This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStoreDB each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
+
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 7.8.13:
+
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -e SINGLESTORE_VERSION="7.8.13" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
+    ghcr.io/singlestore-labs/singlestoredb-dev
+```
+
+> **Note**
+> You can mount `/server` into a Docker volume to preserve the installed SingleStoreDB server binaries if you are unable to use the [custom image method]. This will increase subsequent startup performance at the expense of complexity.
+
+[custom image method]: #how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version
 
 ## How to use this container in a CI/CD environment?
 
@@ -239,6 +278,12 @@ The differences between the old image and the new image are the following:
 
 In all cases we recommend using the new image unless you need to run a older version of SingleStore which has not been released in `singlestoredb-dev-image`.
 
+## Apple Silicon (M1/M2 chips) performance notes
+
+In order to support running SingleStoreDB on Apple Silicon many of our performance optimizations are disabled. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStoreDB) and when running queries for the first time.
+
+To tune this performance impact (either faster or slower) you can change the number of cores and amount of RAM allocated to the Docker virtual machine by [following the documentation here][docker-resource-docs].
+
 [versions]: https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
 [changelog]: CHANGELOG.md
 [try-free]: https://www.singlestore.com/try-free/
@@ -247,3 +292,4 @@ In all cases we recommend using the new image unless you need to run a older ver
 [forums]: https://www.singlestore.com/forum/
 [portal]: https://portal.singlestore.com/
 [data-api]: https://docs.singlestore.com/managed-service/en/reference/data-api.html
+[docker-resource-docs]: https://docs.docker.com/desktop/settings/mac/#advanced
