@@ -1,6 +1,10 @@
 #!/bin/bash
 set -ebmuo pipefail
 
+# remove the .ready flag if it exists to make sure the healthcheck doesn't pass
+# before everything has been initialized
+rm -f /server/.ready
+
 if [ -z "${SINGLESTORE_LICENSE-}" ]; then
     echo !!! ERROR !!!
     echo The SINGLESTORE_LICENSE environment variable must be specified when creating the Docker container
@@ -63,8 +67,6 @@ fi
 singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
 STUDIO_PID=$!
 
-touch /server/.ready
-
 # tail the logs
 tail --pid ${MASTER_PID} --pid ${LEAF_PID} -F $(printf '%s ' "${LOG_FILES[@]}") &
 TAIL_PID=$!
@@ -91,6 +93,8 @@ handle_sigchld() {
     done
 }
 trap handle_sigchld SIGCHLD
+
+touch /server/.ready
 
 wait ${TAIL_PID} || true
 exit 0

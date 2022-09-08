@@ -24,6 +24,7 @@ TEST_FILTER="${2-}"
 wait_for_healthy() {
     local container="${1}"
     local timeout="${2}"
+    local logs_ts=$(date -uIseconds)
 
     echo "Waiting for container '${container}' to be healthy..."
     for i in $(seq ${timeout}); do
@@ -41,7 +42,8 @@ wait_for_healthy() {
             return 0
         fi
         if [[ $(expr ${i} % 5) == 0 ]]; then
-            docker logs ${container}
+            docker logs --since ${logs_ts} ${container}
+            logs_ts=$(date -uIseconds)
         fi
         sleep 1
     done
@@ -328,12 +330,14 @@ test_exit_status() {
 
     # should exit 0 for SIGINT, SIGTERM, SIGQUIT
     for sig in SIGINT SIGTERM SIGQUIT; do
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "container should exit 0 when receiving ${sig}"
-        echo
         docker start ${CURRENT_CONTAINER_ID}
         wait_for_healthy ${CURRENT_CONTAINER_ID} 30
 
+        echo "sending ${sig} to container ${CURRENT_CONTAINER_ID}"
         docker kill -s ${sig} ${CURRENT_CONTAINER_ID}
+        echo "waiting for container to exit"
         local exit_code=$(docker wait ${CURRENT_CONTAINER_ID})
         if [[ ${exit_code} != "0" ]]; then
             echo "Exit code is ${exit_code} instead of 0"
@@ -343,8 +347,8 @@ test_exit_status() {
 
     # should have a non-zero exit code when sub-processes exit unexpectedly
     for role in master leaf; do
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "container should exit non-zero when ${role} exits unexpectedly"
-        echo
 
         docker start ${CURRENT_CONTAINER_ID}
         wait_for_healthy ${CURRENT_CONTAINER_ID} 30
