@@ -65,6 +65,7 @@ docker_run() {
     )
 
     wait_for_healthy ${CURRENT_CONTAINER_ID} 90
+    wait_for_all_dbs_online 30
 }
 
 docker_exec() {
@@ -83,6 +84,23 @@ memsqlctl() {
 query_master() {
     MASTER_ID=$(memsqlctl list-nodes --role master -q)
     memsqlctl --json query --memsql-id ${MASTER_ID} -e "${1}"
+}
+
+wait_for_all_dbs_online() {
+    local timeout="${1}"
+
+    echo "Waiting for all databases to be online..."
+    for i in $(seq ${timeout}); do
+        local status=$(query_master "select bit_and(summary='healthy') as status from (select summary from information_schema.MV_DISTRIBUTED_DATABASES_STATUS union all select 'healthy' as summary)" | jq -r '.rows[0].status')
+        if [[ "${status}" == "1" ]]; then
+            echo "All databases are online."
+            return 0
+        fi
+        sleep 1
+    done
+
+    echo "Timeout exceeded; status: ${status}"
+    return 1
 }
 
 cleanup_container() {
@@ -160,6 +178,7 @@ test_sanity() {
 
     docker restart ${CURRENT_CONTAINER_ID}
     wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+    wait_for_all_dbs_online 30
 
     COUNT_AFTER_RESTART=$(query_master "select count(*) from test.foo")
 
@@ -211,6 +230,7 @@ test_init_sql() {
     # verify init.sql only runs once
     docker restart ${CURRENT_CONTAINER_ID}
     wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+    wait_for_all_dbs_online 30
 
     COUNT_AFTER_RESTART=$(query_master "select count(*) as c from foo.bar" | jq -r '.rows[0].c')
     if [[ "${COUNT_AFTER_RESTART}" != "32" ]]; then
@@ -370,6 +390,7 @@ test_upgrade() {
     # run the current version of the image
     docker_run -v ${VOLUME_ID}:/data
     wait_for_healthy ${CURRENT_CONTAINER_ID} 30
+    wait_for_all_dbs_online 30
 
     # verify that the database and table still exist
     COUNT_AFTER_RECREATE=$(query_master "select count(*) from test.foo")
