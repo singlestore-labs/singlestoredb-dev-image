@@ -1,6 +1,9 @@
 name: build
 
 on:
+  schedule:
+    - cron: "0 0 * * *"
+
   push:
     paths-ignore:
       - "CHANGELOG.md"
@@ -50,11 +53,12 @@ jobs:
         run: |
           ./test/test.sh singlestore-labs/singlestoredb-dev
 
-      - name: Anchore Container Scan
-        uses: anchore/scan-action@v3
-        with:
-          image: singlestore-labs/singlestoredb-dev
-          severity-cutoff: high
+      - uses: anchore/scan-action/download-grype@v3
+        id: grype
+
+      - name: scan Docker image
+        run: |
+          ${{steps.grype.outputs.cmd}} --only-fixed singlestore-labs/singlestoredb-dev
 
   publish-image:
     if: github.ref_type == 'tag'

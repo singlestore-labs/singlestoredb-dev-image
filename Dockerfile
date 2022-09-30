@@ -1,5 +1,7 @@
 FROM almalinux:8.6-20220901
 
+ARG SECURITY_UPDATES_AS_OF=2022-09-30
+
 RUN yum makecache --refresh && \
     yum install -y yum-utils wget procps && \
     yum update -y curl && \

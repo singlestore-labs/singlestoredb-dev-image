@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0 - 2022-09-30
+
+ - SingleStoreDB Version 7.9.10
+ - SingleStoreDB Toolbox Version 1.13.13
+ - Bugfix: ensure that we set license as early as possible to support running on larger machines
+
 ## 0.0.8 - 2022-09-08
 
  - Removed the -cloud and -onprem tags, replacing it with a method to support switching the SingleStoreDB version at runtime or by building a custom image.

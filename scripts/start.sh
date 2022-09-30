@@ -50,10 +50,13 @@ LEAF_PID=$(memsqlctl describe-node --memsql-id ${LEAF_ID} --property Pid)
 
 # update the pw
 echo "Configuring SingleStore nodes..."
-memsqlctl -jy change-root-password --all --password "${ROOT_PASSWORD}"
 
 # set the correct license
+# this must go first, otherwise we may run into a license error if subsequent queries codegen
 memsqlctl -jy set-license --license "${SINGLESTORE_LICENSE}"
+
+# set the correct root password
+memsqlctl -jy change-root-password --all --password "${ROOT_PASSWORD}"
 
 # run init.sql if it exists (and we haven't already run it)
 if [[ -f /init.sql && ! -f /data/.init.sql.done ]]; then

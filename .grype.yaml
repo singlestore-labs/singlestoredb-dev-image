@@ -7,12 +7,3 @@ db:
 
 exclude:
   - /server/*/extractors
-
-ignore:
-  # systemd is not used
-  - vulnerability: CVE-2022-2526
-  # rpm 1.18 is not out yet
-  - vulnerability: CVE-2021-35938
-    fix-state: unknown
-  - vulnerability: CVE-2021-35939
-    fix-state: unknown
