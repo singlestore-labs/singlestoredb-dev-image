@@ -16,8 +16,8 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
   - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
   - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
-  - [Github Actions](#github-actions)
-  - [Gitlab CI/CD](#gitlab-cicd)
+  - [How to run SingleStoreDB in Github Actions?](#how-to-run-singlestoredb-in-github-actions)
+  - [How to run SingleStoreDB in Gitlab CI/CD?](#how-to-run-singlestoredb-in-gitlab-cicd)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 - [Apple Silicon (M1/M2 chips) performance notes](#apple-silicon-m1m2-chips-performance-notes)
 
@@ -193,7 +193,7 @@ docker run \
 
 This Docker image defines a healthcheck which runs every 5 seconds. Any CI/CD system or container runtime which respects the healthcheck should automatically wait for SingleStore to be running and healthy.
 
-### Github Actions
+### How to run SingleStoreDB in Github Actions?
 
 Here is an example workflow which runs SingleStore as a container service and queries it from the job.
 
@@ -223,7 +223,7 @@ jobs:
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
 ```
 
-### Gitlab CI/CD
+### How to run SingleStoreDB in Gitlab CI/CD?
 
 Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately Gitlab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [three year old issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in Gitlab, so hopefully this can be simplified eventually.
 
