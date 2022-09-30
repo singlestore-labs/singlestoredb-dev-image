@@ -1,9 +1,11 @@
 # SingleStoreDB Dev Image <!-- omit in toc -->
 [![Github Actions status image](https://github.com/singlestore-labs/singlestoredb-dev-image/actions/workflows/build.yml/badge.svg)](https://github.com/singlestore-labs/singlestoredb-dev-image/actions)
 
-The SingleStoreDB Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment (including Github Actions). This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
+The SingleStoreDB Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment (including [Github Actions][header-gh-actions]). This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
 
 If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums].
+
+[header-gh-actions]: #how-to-run-singlestoredb-in-github-actions
 
 - [How to run the Docker image?](#how-to-run-the-docker-image)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
