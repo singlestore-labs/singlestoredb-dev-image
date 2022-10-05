@@ -290,7 +290,7 @@ To tune this performance impact (either faster or slower) you can change the num
 [changelog]: CHANGELOG.md
 [try-free]: https://www.singlestore.com/try-free/
 [singlestore]: https://www.singlestore.com
-[gh-issues]: https://github.com/singlestore-labs/demo-realtime-digital-marketing/issues
+[gh-issues]: https://github.com/singlestore-labs/singlestoredb-dev-image/issues
 [forums]: https://www.singlestore.com/forum/
 [portal]: https://portal.singlestore.com/
 [data-api]: https://docs.singlestore.com/managed-service/en/reference/data-api.html
