@@ -14,6 +14,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to access the Data API?](#how-to-access-the-data-api)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
+- [How to set SingleStoreDB Global Variables?](#how-to-set-singlestoredb-global-variables)
 - [How to use a specific SingleStoreDB version?](#how-to-use-a-specific-singlestoredb-version)
   - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
   - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
@@ -33,7 +34,7 @@ We recommend using an explicit image version tag whenever possible. You can find
 docker run \
     -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
-    -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
     --platform linux/amd64 \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
@@ -149,6 +150,26 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
+
+## How to set SingleStoreDB Global Variables?
+
+SingleStoreDB can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStoreDB Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
+
+For example, if you want to set `default_partitions_per_leaf` to 1, you would do this:
+
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
+    -e SINGLESTORE_SET_GLOBAL_DEFAULT_PARTITIONS_PER_LEAF=1 \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
+    ghcr.io/singlestore-labs/singlestoredb-dev
+```
+
+Multiple environment variables can be specified if you want to configure multiple global variables in SingleStoreDB.
+
+If you specify a variable which is not supported by SingleStoreDB, the image will fail to start. You can see the full error message by inspecting the failed docker container's logs using `docker log`.
 
 ## How to use a specific SingleStoreDB version?
 
@@ -295,3 +316,4 @@ To tune this performance impact (either faster or slower) you can change the num
 [portal]: https://portal.singlestore.com/
 [data-api]: https://docs.singlestore.com/managed-service/en/reference/data-api.html
 [docker-resource-docs]: https://docs.docker.com/desktop/settings/mac/#advanced
+[global-vars]: https://docs.singlestore.com/db/latest/en/reference/configuration-reference/engine-variables/engine-variables.html

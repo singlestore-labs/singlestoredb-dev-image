@@ -33,7 +33,7 @@ wait_for_healthy() {
             local exit_code=$(docker inspect -f '{{ .State.ExitCode }}' ${container})
             echo "Container exited with exit code ${exit_code}"
             docker logs ${container}
-            return 1
+            exit 1
         fi
 
         local health_status=$(docker inspect -f '{{ .State.Health.Status }}' ${container})
@@ -50,7 +50,7 @@ wait_for_healthy() {
 
     health_status=$(docker inspect -f '{{ .State.Health.Status }}' ${container})
     echo "Timeout exceeded; health_status: ${health_status}"
-    return 1
+    exit 1
 }
 
 CURRENT_CONTAINER_ID=
@@ -136,7 +136,23 @@ cleanup() {
     echo "--------------------------------------------------------------------------------"
 }
 
-trap cleanup SIGTERM SIGQUIT SIGINT EXIT
+handle_exit() {
+    exit_code=$?
+    if [[ ${exit_code} != 0 ]]; then
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "Tests FAILED"
+        echo
+        echo "Last container logs:"
+        echo "------------------------------------------------------"
+        docker logs ${CURRENT_CONTAINER_ID}
+        echo "------------------------------------------------------"
+        echo
+    fi
+    cleanup
+}
+
+trap cleanup SIGTERM SIGQUIT SIGINT
+trap handle_exit EXIT
 
 TESTS=()
 
@@ -419,6 +435,26 @@ test_switch_version() {
     fi
 }
 TESTS+=("test_switch_version")
+
+test_set_global() {
+    docker_run \
+        -e SINGLESTORE_SET_GLOBAL_DEFAULT_PARTITIONS_PER_LEAF=2 \
+        -e SINGLESTORE_SET_GLOBAL_cluster_NAME=foobar
+
+    query_master "create database test"
+    PARTITIONS=$(query_master "show partitions on test" | jq -r '.rows | length')
+    if [[ "${PARTITIONS}" != "2" ]]; then
+        echo "Partitions is ${PARTITIONS} instead of 2"
+        exit 1
+    fi
+
+    CLUSTER_NAME=$(query_master "select @@cluster_name" | jq -r '.rows[0]."@@cluster_name"')
+    if [[ "${CLUSTER_NAME}" != "foobar" ]]; then
+        echo "Cluster name is ${CLUSTER_NAME} instead of foobar"
+        exit 1
+    fi
+}
+TESTS+=("test_set_global")
 
 run_test() {
     echo "Running ${1}..."

@@ -6,14 +6,14 @@ set -ebmuo pipefail
 rm -f /server/.ready
 
 if [ -z "${SINGLESTORE_LICENSE-}" ]; then
-    echo !!! ERROR !!!
-    echo The SINGLESTORE_LICENSE environment variable must be specified when creating the Docker container
+    echo "!!! ERROR !!!"
+    echo "The SINGLESTORE_LICENSE environment variable must be specified when creating the Docker container"
     exit 1
 fi
 
 if [ -z "${ROOT_PASSWORD-}" ]; then
-    echo !!! ERROR !!!
-    echo The ROOT_PASSWORD environment variable must be specified when creating the Docker container
+    echo "!!! ERROR !!!"
+    echo "The ROOT_PASSWORD environment variable must be specified when creating the Docker container"
     exit 1
 fi
 
@@ -57,6 +57,21 @@ memsqlctl -jy set-license --license "${SINGLESTORE_LICENSE}"
 
 # set the correct root password
 memsqlctl -jy change-root-password --all --password "${ROOT_PASSWORD}"
+
+# set any dynamic globals from the environment
+for var in "${!SINGLESTORE_SET_GLOBAL_@}"; do
+    # read the value
+    declare -n val="${var}"
+
+    # remove prefix and make var lowercase
+    var="${var#SINGLESTORE_SET_GLOBAL_}"
+    var="${var,,}"
+
+    echo "Setting ${var} to ${val}"
+    memsqlctl -jy update-config \
+        --memsql-id ${MASTER_ID} --set-global --detailed-output \
+        --key "${var}" --value "${val}"
+done
 
 # run init.sql if it exists (and we haven't already run it)
 if [[ -f /init.sql && ! -f /data/.init.sql.done ]]; then

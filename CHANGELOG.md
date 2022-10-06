@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2022-10-06
+ - Allow SingleStoreDB global variables to be set via environment variables
+ - SingleStore Studio version 4.0.8
+ - Improved test failure output
+
 ## 0.1.1 - 2022-10-05
  - SingleStoreDB Version 7.9.11
 
