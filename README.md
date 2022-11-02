@@ -8,6 +8,8 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 [header-gh-actions]: #how-to-run-singlestoredb-in-github-actions
 
 - [How to run the Docker image?](#how-to-run-the-docker-image)
+  - [How to run the Docker image on **Linux**, **Windows**, or **Apple Intel**?](#how-to-run-the-docker-image-on-linux-windows-or-apple-intel)
+  - [How to run the Docker image on **Apple Silicon** (M1/M2 chips)?](#how-to-run-the-docker-image-on-apple-silicon-m1m2-chips)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
 - [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
@@ -26,9 +28,33 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 
 ## How to run the Docker image?
 
-[Sign up][try-free] for a free SingleStore license. This allows you to run up to 4 nodes up to 32 gigs each for free. Grab your license key from [SingleStore portal][portal] to use in the docker run command below.
+**[Sign up][try-free] for a free SingleStore license**. This allows you to run up to 4 nodes up to 32 gigs each for free. Grab your license key from [SingleStore portal][portal] to use in the docker run command below.
 
-We recommend using an explicit image version tag whenever possible. You can find a [list of image tags here][versions] and inspect [the changelog here][changelog].
+> **Note**
+> We recommend using an explicit image version tag whenever possible. You can find a [list of image tags here][versions] and inspect [the changelog here][changelog].
+
+### How to run the Docker image on **Linux**, **Windows**, or **Apple Intel**?
+
+*See next section for Apple Silicon (M1/M2 chips) instructions.*
+
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
+    ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
+### How to run the Docker image on **Apple Silicon** (M1/M2 chips)?
+
+First, make sure you are using Docker desktop which supports the latest virtualization technology on Apple Silicon machines.
+
+Second, **you must enable "Use the new Virtualization framework" in Docker Desktop preferences**. If you do not do this, SingleStore will run very slowly and consume a lot of power on your Mac. Enabling the other Beta features is also recommended for additional performance benefits.
+
+![Screenshot of enabling the new Virtualization framework in Docker's preferences](.github/osx_docker_virt_pref.png)
+
+Third, run the following command to start SingleStore. Note the `--platform linux/amd64` instruction which is required when running on Apple Silicon.
 
 ```bash
 docker run \
@@ -39,9 +65,6 @@ docker run \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
-
-> **Note**
-> The `--platform` flag is only needed to enable support with the new Mac M1 or M2 chipset (Apple Silicon). You can safely remove or ignore that flag on x86_64 (amd64) compatible hardware such as most Intel and AMD chips.
 
 ## How to open a SQL shell?
 
