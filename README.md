@@ -18,6 +18,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How to set SingleStoreDB Global Variables?](#how-to-set-singlestoredb-global-variables)
 - [How to use a specific SingleStoreDB version?](#how-to-use-a-specific-singlestoredb-version)
+  - [What are some known SingleStoreDB versions?](#what-are-some-known-singlestoredb-versions)
   - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
   - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
@@ -198,6 +199,16 @@ If you specify a variable which is not supported by SingleStoreDB, the image wil
 
 The SingleStoreDB Dev Image uses the latest SingleStoreDB version available in the managed service by default. If you would prefer to use another SingleStoreDB version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
 
+### What are some known SingleStoreDB versions?
+
+You can use the version numbers in the first column of the following table in order to run a specific version of SingleStoreDB. If you want to use a particular patch version, just specify that version instead.
+
+| `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
+| ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-8-release-notes/maintenance-release-changelog.html) |
+| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-6-release-notes/maintenance-release-changelog.html) |
+| dev:19308979-a4f4-4858-844e-f65e22ac6494 | SingleStoreDB 8 release candidate (not production ready)         | [announcement](https://www.singlestore.com/forum/t/singlestoredb-8-0-release-candidate-available/6011)                                       |
+
 ### How to build a custom version of this Docker Image with a specific SingleStoreDB Version?
 
 The script `/scripts/switch-version.sh` can be used to easily build a custom version of this image. The fastest way to do this is using Docker build like so:
@@ -209,7 +220,7 @@ RUN /scripts/switch-version.sh SINGLESTORE_VERSION SINGLESTORE_LICENSE
 EOF
 ```
 
-Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStoreDB installed and ready to use.
+Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use (see table above) as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStoreDB installed and ready to use.
 
 ### How to specify a SingleStoreDB version at runtime?
 
@@ -218,14 +229,14 @@ In order to use a specific version of SingleStoreDB at runtime, you can start th
 > **Warning**
 > This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStoreDB each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
 
-Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 7.8.13:
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 7.8:
 
 ```bash
 docker run \
     -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
-    -e SINGLESTORE_VERSION="7.8.13" \
+    -e SINGLESTORE_VERSION="7.8" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
