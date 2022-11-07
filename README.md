@@ -8,8 +8,9 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 [header-gh-actions]: #how-to-run-singlestoredb-in-github-actions
 
 - [How to run the Docker image?](#how-to-run-the-docker-image)
-  - [How to run the Docker image on **Linux**, **Windows**, or **Apple Intel**?](#how-to-run-the-docker-image-on-linux-windows-or-apple-intel)
+  - [How to run the Docker image on **Linux** or **Apple Intel**?](#how-to-run-the-docker-image-on-linux-or-apple-intel)
   - [How to run the Docker image on **Apple Silicon** (M1/M2 chips)?](#how-to-run-the-docker-image-on-apple-silicon-m1m2-chips)
+  - [How to run the Docker image on **Windows**?](#how-to-run-the-docker-image-on-windows)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
 - [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
@@ -34,7 +35,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 > **Note**
 > We recommend using an explicit image version tag whenever possible. You can find a [list of image tags here][versions] and inspect [the changelog here][changelog].
 
-### How to run the Docker image on **Linux**, **Windows**, or **Apple Intel**?
+### How to run the Docker image on **Linux** or **Apple Intel**?
 
 *See next section for Apple Silicon (M1/M2 chips) instructions.*
 
@@ -65,6 +66,14 @@ docker run \
     --platform linux/amd64 \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
+### How to run the Docker image on **Windows**?
+
+Windows Powershell and Command Prompt (CMD) work best if you run the command on a single line. Alternatively you can use backticks for multi-line strings in Powershell. Either way, the following single-line version of the command will work on Windows.
+
+```bash
+docker run -d --name singlestoredb-dev -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" -p 3306:3306 -p 8080:8080 -p 9000:9000 ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
 ## How to open a SQL shell?
