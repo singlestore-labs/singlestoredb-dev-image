@@ -85,6 +85,25 @@ fi
 singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
 STUDIO_PID=$!
 
+# check to see if we have an extension to run, and if so download + run it
+EXTENSION_SCRIPT_PID=-1
+if [ -n "${EXTENSION_URL-}" ]; then
+    # for now we just support a single extension, but that might change
+    # also we put the extension data dir in our persistent data dir which allows
+    # extensions to persist between restarts
+    EXTENSION_DATA_DIR="/data/extension/0"
+    mkdir -p "${EXTENSION_DATA_DIR}"
+    wget --no-check-certificate "${EXTENSION_URL}" -O "${EXTENSION_DATA_DIR}/extension.sh"
+    chmod +x "${EXTENSION_DATA_DIR}/extension.sh"
+
+    # run the extension in the background
+    "${EXTENSION_DATA_DIR}/extension.sh" "${EXTENSION_DATA_DIR}" 2>&1 >/logs/extension.log &
+    EXTENSION_SCRIPT_PID=$!
+
+    # add log file to list of files to tail
+    LOG_FILES+=("/logs/extension.log")
+fi
+
 # tail the logs
 tail --pid ${MASTER_PID} --pid ${LEAF_PID} -F $(printf '%s ' "${LOG_FILES[@]}") &
 TAIL_PID=$!
@@ -94,6 +113,7 @@ cleanup() {
 
     echo "Stopping Cluster..."
     memsqlctl -jy stop-node --all
+    kill ${EXTENSION_SCRIPT_PID} 2>/dev/null || true
     kill ${STUDIO_PID} 2>/dev/null || true
     kill ${TAIL_PID} 2>/dev/null || true
     echo "Stopped."
@@ -101,8 +121,18 @@ cleanup() {
 trap cleanup SIGTERM SIGQUIT SIGINT
 
 handle_sigchld() {
+    PIDS=(
+        ${MASTER_PID}
+        ${LEAF_PID}
+        ${STUDIO_PID}
+    )
+    # add extension pid if it exists
+    if [ ${EXTENSION_SCRIPT_PID} -ne -1 ]; then
+        PIDS+=(${EXTENSION_SCRIPT_PID})
+    fi
+
     # if any of our primary processes have died, clean up and exit
-    for pid in ${MASTER_PID} ${LEAF_PID} ${STUDIO_PID}; do
+    for pid in "${PIDS[@]}"; do
         if ! kill -0 ${pid} &>/dev/null; then
             echo "Process ${pid} exited unexpectedly"
             cleanup
