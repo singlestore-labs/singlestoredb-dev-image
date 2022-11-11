@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.4 - 2022-11-10
+ - Extension script support
+
 ## 0.1.3 - 2022-10-17
  - SingleStoreDB Version 7.9.12
 
