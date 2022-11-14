@@ -15,6 +15,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
 - [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
 - [How to access the Data API?](#how-to-access-the-data-api)
+- [How to use WebAssembly (Wasm) backed functions?](#how-to-use-webassembly-wasm-backed-functions)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How to set SingleStoreDB Global Variables?](#how-to-set-singlestoredb-global-variables)
@@ -135,6 +136,17 @@ In addition to supporting the MySQL Protocol, SingleStore also has a JSON over H
 
 > **Note**
 > For more information on how to use the Data API please [visit the documentation.][data-api]
+
+## How to use WebAssembly (Wasm) backed functions?
+
+The Code Engine feature in SingleStoreDB supports creating functions (UDFs and
+TVFs) using code compiled to WebAssembly (Wasm). This feature supports any
+language that can compile to the Wasm core specification, which allows you to
+create UDFs in a language of your choice using existing code libraries and run
+them in a sandboxed environment for enhanced security. It uses a linear memory
+model and provides hard memory protection boundaries.
+
+This Docker image has Wasm functions enabled by default. You can learn how to compile and load Wasm UDFs and UDAs into SingleStoreDB [on our docs][wasm].
 
 ## How to use Docker volumes for persistent storage?
 
@@ -360,3 +372,4 @@ To tune this performance impact (either faster or slower) you can change the num
 [data-api]: https://docs.singlestore.com/managed-service/en/reference/data-api.html
 [docker-resource-docs]: https://docs.docker.com/desktop/settings/mac/#advanced
 [global-vars]: https://docs.singlestore.com/db/latest/en/reference/configuration-reference/engine-variables/engine-variables.html
+[wasm]: https://docs.singlestore.com/db/v8.0/en/reference/code-engine---powered-by-wasm.html
