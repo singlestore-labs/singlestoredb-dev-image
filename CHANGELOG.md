@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.7 - 2022-12-05
+ - SingleStoreDB Version 7.9.14
+
 ## 0.1.6 - 2022-11-29
  - SingleStoreDB Toolbox Version 1.14.2
 
