@@ -1,6 +1,6 @@
 {
   "channel": "dev",
-  "server": "7.9.13-c41706fb6f",
+  "server": "7.9.14-b75041c09b",
   "toolbox": "1.14.2",
   "client": "1.0.7",
   "studio": "4.0.8"
