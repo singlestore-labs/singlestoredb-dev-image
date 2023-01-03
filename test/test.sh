@@ -234,10 +234,8 @@ test_volumes() {
 }
 TESTS+=("test_volumes")
 
-# verify that init.sql works
-test_init_sql() {
-    docker_run -v "${SCRIPT_DIR}/init.sql:/init.sql"
-
+# shared by test_init_sql_default and test_init_sql_env
+init_sql_base_test() {
     COUNT=$(query_master "select count(*) as c from foo.bar" | jq -r '.rows[0].c')
     if [[ "${COUNT}" != "32" ]]; then
         echo "Count differs from what init.sql should have created"
@@ -257,7 +255,20 @@ test_init_sql() {
         exit 1
     fi
 }
-TESTS+=("test_init_sql")
+
+# verify that init.sql works
+test_init_sql_default() {
+    docker_run -v "${SCRIPT_DIR}/init.sql:/init.sql"
+    init_sql_base_test
+}
+TESTS+=("test_init_sql_default")
+
+# verify that init.sql can be put in a different location
+test_init_sql_env() {
+    docker_run -v "${SCRIPT_DIR}/init.sql:/foo/bar.sql" -e INIT_SQL=/foo/bar.sql
+    init_sql_base_test
+}
+TESTS+=("test_init_sql_env")
 
 test_http_api() {
     docker_run
@@ -464,8 +475,21 @@ run_test() {
     cleanup
 }
 
+# count number of test_ functions and ensure it matches the number of tests in $TESTS
+DEFINED_TESTS=$(declare -F | grep 'declare -f test_' | wc -l)
+if [[ ${DEFINED_TESTS} != ${#TESTS[@]} ]]; then
+    echo "Number of tests defined (${DEFINED_TESTS}) does not match number of tests in TESTS (${#TESTS[@]})"
+    exit 1
+fi
+
 # only run tests which match $TEST_FILTER if TEST_FILTER is set
 if [[ -n "${TEST_FILTER}" ]]; then
+    # if no tests match filter then exit with an error
+    if [[ $(echo "${TESTS[@]}" | grep -c "${TEST_FILTER}") == "0" ]]; then
+        echo "No tests match filter ${TEST_FILTER}"
+        exit 1
+    fi
+
     echo "Running tests matching ${TEST_FILTER}"
     for test in "${TESTS[@]}"; do
         if [[ "${test}" =~ ${TEST_FILTER} ]]; then

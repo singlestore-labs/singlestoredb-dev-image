@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 - 2023-01-03
+ - Happy new years!
+ - Allow init.sql location to be customized via env variable
+ - SingleStoreDB Toolbox version 1.14.4
+ - SingleStoreDB Studio version 4.0.11
+
 ## 0.2.0 - 2022-12-13
  - SingleStoreDB Version 8.0.4
  - SingleStoreDB Toolbox Version 1.14.3
