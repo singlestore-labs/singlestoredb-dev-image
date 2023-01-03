@@ -177,7 +177,7 @@ This Docker image has a number of volume mount points in addition to `/data`. He
 
 ## How to initialize this container with a SQL file?
 
-When this docker image starts for the first time it will check to see if `/init.sql` exists in its filesystem. If `/init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
+When this docker image starts for the first time it will check to see if an `init.sql` file exists in its filesystem. The default location is `/init.sh`, but it can be customized via the `INIT_SQL` environment variable. If `init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
 
 One way to do this is mounting a `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
 

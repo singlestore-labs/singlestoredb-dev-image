@@ -73,10 +73,12 @@ for var in "${!SINGLESTORE_SET_GLOBAL_@}"; do
         --key "${var}" --value "${val}"
 done
 
+INIT_SQL="${INIT_SQL:-/init.sql}"
+
 # run init.sql if it exists (and we haven't already run it)
-if [[ -f /init.sql && ! -f /data/.init.sql.done ]]; then
+if [[ -f "${INIT_SQL}" && ! -f /data/.init.sql.done ]]; then
     echo "Running init.sql..."
-    singlestore -p${ROOT_PASSWORD} </init.sql
+    singlestore -p${ROOT_PASSWORD} < "${INIT_SQL}"
     touch /data/.init.sql.done
 fi
 
