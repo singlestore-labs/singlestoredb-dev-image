@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.2 - 2023-01-10
+ - SingleStoreDB Version 8.0.5
+
 ## 0.2.1 - 2023-01-03
  - Happy new years!
  - Allow init.sql location to be customized via env variable
