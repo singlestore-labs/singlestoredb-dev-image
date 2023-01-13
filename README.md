@@ -228,7 +228,7 @@ You can use the version numbers in the first column of the following table in or
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-8-release-notes/maintenance-release-changelog.html) |
 | 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-6-release-notes/maintenance-release-changelog.html) |
-| dev:19308979-a4f4-4858-844e-f65e22ac6494 | SingleStoreDB 8 release candidate (not production ready)         | [announcement](https://www.singlestore.com/forum/t/singlestoredb-8-0-release-candidate-available/6011)                                       |
+| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/en/release-notes/singlestoredb-memsql/8-0-release-notes/maintenance-release-changelog.html)                                       |
 
 ### How to build a custom version of this Docker Image with a specific SingleStoreDB Version?
 
