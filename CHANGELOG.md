@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 - 2023-02-07
+ - SingleStoreDB Version 8.0.9
+ - SingleStoreDB Toolbox Version 1.15.0
+
 ## 0.2.3 - 2023-01-17
  - SingleStoreDB Version 8.0.6
 
