@@ -68,8 +68,7 @@ for var in "${!SINGLESTORE_SET_GLOBAL_@}"; do
     var="${var,,}"
 
     echo "Setting ${var} to ${val}"
-    memsqlctl -jy update-config \
-        --memsql-id ${MASTER_ID} --set-global --detailed-output \
+    sdb-admin -jy update-config --set-global --all \
         --key "${var}" --value "${val}"
 done
 
