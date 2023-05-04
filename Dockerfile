@@ -3,7 +3,6 @@ FROM almalinux:8.6-20220901
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
 RUN yum makecache --refresh && \
-    yum install -y yum-utils wget procps && \
     yum install -y yum-utils wget procps java-1.8.0-openjdk && \
     yum update -y curl && \
     yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
