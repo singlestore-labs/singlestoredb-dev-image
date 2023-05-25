@@ -35,6 +35,8 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 
 > **Note**
 > We recommend using an explicit image version tag whenever possible. You can find a [list of image tags here][versions] and inspect [the changelog here][changelog].
+> 
+> To use the free edition license on a machine with more than 32 cores, include the `--cpus=32` option when running the Docker container.
 
 ### How to run the Docker image on **Linux** or **Apple Intel**?
 
