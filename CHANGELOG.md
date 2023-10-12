@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.10 - 2023-10-11
+ - Bugfix: update jq download location.
+ - SingleStoreDB Version 8.1.25
+ - SingleStoreDB Toolbox Version 1.17.4
+ - SingleStoreDB Studio Version 4.0.14
+
 ## 0.2.9 - 2023-09-07
  - SingleStoreDB Version 8.1.20
 
