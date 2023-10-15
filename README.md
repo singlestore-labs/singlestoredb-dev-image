@@ -152,7 +152,10 @@ This Docker image has Wasm functions enabled by default. You can learn how to co
 
 ## How to use Docker volumes for persistent storage?
 
-You can use a Docker volume to set up persistent storage by mounting the volume to `/data` in the container. You can do this by simply adding `-v VOLUME_NAME:/data` or `-v /data` to the Docker run command. Make sure to replace `VOLUME_NAME` with a name for the volume.
+> **Note**
+> If you are [specifying a Singlestore version at runtime](#how-to-specify-a-singlestoredb-version-at-runtime), your data will always be overwritten when the container restarts each time, as the container will always attempt to re-download and re-initialise the installed version on each run.
+>
+> To get around this, build a [custom image](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version) with your specific version.
 
 ```bash
 docker run \
