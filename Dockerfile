@@ -3,7 +3,7 @@ FROM almalinux:8.6-20220901
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
 RUN yum makecache --refresh && \
-    yum install -y yum-utils wget procps java-1.8.0-openjdk && \
+    yum install -y yum-utils wget procps java-11-openjdk && \
     yum update -y curl && \
     yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
     yum -y update-minimal --setopt=tsflags=nodocs --nobest --security --sec-severity=Important --sec-severity=Critical && \
@@ -66,11 +66,11 @@ RUN sdb-toolbox-config -y register-host \
 ADD scripts/install.sh /scripts/install.sh
 RUN /scripts/install.sh "$(echo "${CONFIG}" | jq -r .channel):$(echo "${CONFIG}" | jq -r .server)"
 
+ADD scripts/memsqlctl /bin/memsqlctl
 ADD scripts/init.sh /scripts/init.sh
 RUN /scripts/init.sh "${BOOTSTRAP_LICENSE}"
 
 ADD scripts/switch-version.sh /scripts/switch-version.sh
-ADD scripts/memsqlctl /bin/memsqlctl
 
 ADD scripts/start.sh /scripts/start.sh
 CMD ["/scripts/start.sh"]
