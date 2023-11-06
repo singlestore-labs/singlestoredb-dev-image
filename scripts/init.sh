@@ -45,7 +45,7 @@ sdb-admin -y add-leaf --host 127.0.0.1 --port 3307 --password ${INIT_PW}
 sdb-admin -y update-config --all --set-global --key enable_external_functions --value on
 sdb-admin -y update-config --all --set-global --key http_api --value on
 
-isVersionGE()
+isEngineVersionGE()
 {
     local arg_major=${1}
     local arg_minor=${2}
@@ -75,7 +75,7 @@ isVersionGE()
     return 0
 }
 
-if isVersionGE 8 5; then
+if isEngineVersionGE 8 5; then
     sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/bin/java
 fi
 
