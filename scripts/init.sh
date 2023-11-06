@@ -45,6 +45,40 @@ sdb-admin -y add-leaf --host 127.0.0.1 --port 3307 --password ${INIT_PW}
 sdb-admin -y update-config --all --set-global --key enable_external_functions --value on
 sdb-admin -y update-config --all --set-global --key http_api --value on
 
+isEngineVersionGE()
+{
+    local arg_major=${1}
+    local arg_minor=${2}
+
+    local version=$(memsqlctl version | sed -n 's/^Version: \(.*\)$/\1/p')
+    local versionParts=($(echo ${version//./ }))
+    local major=${versionParts[0]}
+    local minor=${versionParts[1]}
+    local patch=${versionParts[2]}
+
+    if [[ "${major}" -ne ${arg_major} ]]; then
+        if [[ "${major}" -gt ${arg_major} ]]; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+
+    if [[ "${minor}" -ne ${arg_minor} ]]; then
+        if [[ "${minor}" -gt ${arg_minor} ]]; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+
+    return 0
+}
+
+if isEngineVersionGE 8 5; then
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/bin/java
+fi
+
 # stop the nodes to ensure we have a clean image state
 sdb-admin -y stop-node --all
 

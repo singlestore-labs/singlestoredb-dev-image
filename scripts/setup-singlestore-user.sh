@@ -19,7 +19,7 @@ set -eu
 if [[ "$RESULT_USER" -eq 0 ]]; then
     # make sure there are no files for these users/groups that we are going to change otherwise
     # this is sketchy and we shouldnt proceed
-    user_files=$(find / -path /proc -prune -o -user "${user999}" -print)
+    user_files=$(find / -path /sys -prune -o -path /proc -prune -o -user "${user999}" -print)
     if [[ ! -z "$user_files" ]]; then
         echo "found files of user ${user999}, cannot create singlestore user"
         exit 1
@@ -29,7 +29,7 @@ if [[ "$RESULT_USER" -eq 0 ]]; then
 fi
 
 if [[ "$RESULT_GROUP" -eq 0 ]]; then
-    group_files=$(find / -path /proc -prune -o -group "${group998}" -print)
+    group_files=$(find / -path /sys -prune -o -path /proc -prune -o -group "${group998}" -print)
     if [[ ! -z "$group_files" ]]; then
         echo "found files of group ${group998}, cannot create singlestore user"
         exit 1

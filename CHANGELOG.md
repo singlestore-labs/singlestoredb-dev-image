@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.11 - 2023-11-03
+ - Add Java 11 to support newer extractors in SingleStoreDB 8.5
+
 ## 0.2.10 - 2023-10-11
  - Bugfix: update jq download location.
  - SingleStoreDB Version 8.1.25
