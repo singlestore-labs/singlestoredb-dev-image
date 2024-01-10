@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.12 - 2024-01-10
+ - SingleStoreDB Version 8.5.1
+
 ## 0.2.11 - 2023-11-03
  - Add Java 11 to support newer extractors in SingleStoreDB 8.5
 
