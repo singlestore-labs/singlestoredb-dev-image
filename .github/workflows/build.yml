@@ -126,6 +126,11 @@ jobs:
           SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
     steps:
+      - name: free up disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+            tool-cache: false
+
       - name: sanity check using mysql client
         run: |
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1

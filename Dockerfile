@@ -2,6 +2,9 @@ FROM almalinux:8.6-20220901
 
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
+RUN dnf upgrade -y almalinux-release && \
+    yum -y clean all
+
 RUN yum makecache --refresh && \
     yum install -y yum-utils wget procps java-11-openjdk && \
     yum update -y curl && \
