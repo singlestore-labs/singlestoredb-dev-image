@@ -112,10 +112,10 @@ When opening Studio you will see a login screen. Use the username `root` and the
 
 Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
 
- * [Connect to SingleStore](https://docs.singlestore.com/db/latest/en/connect-to-your-cluster.html)
- * [Developer Resources](https://docs.singlestore.com/db/latest/en/developer-resources.html)
- * [Integrations](https://docs.singlestore.com/db/latest/en/integrate-with-singlestoredb.html)
- * [Load Data](https://docs.singlestore.com/db/latest/en/load-data.html)
+ * [Connect to SingleStore](https://docs.singlestore.com/db/latest/connect-to-your-cluster/)
+ * [Developer Resources](https://docs.singlestore.com/db/latest/developer-resources/)
+ * [Integrations](https://docs.singlestore.com/db/latest/integrate-with-singlestore/)
+ * [Load Data](https://docs.singlestore.com/db/latest/load-data/)
 
 ## How to access the Data API?
 
@@ -231,9 +231,11 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-8-release-notes/maintenance-release-changelog.html) |
-| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/en/release-notes/singlestoredb-memsql/7-6-release-notes/maintenance-release-changelog.html) |
-| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/en/release-notes/singlestoredb-memsql/8-0-release-notes/maintenance-release-changelog.html)                                       |
+| 8.5                                      | SingleStoreDB Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog/) |
+| 8.1                                      | SingleStoreDB Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
+| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
+| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
+| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
 
 ### How to build a custom version of this Docker Image with a specific SingleStoreDB Version?
 
@@ -255,14 +257,14 @@ In order to use a specific version of SingleStoreDB at runtime, you can start th
 > **Warning**
 > This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStoreDB each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
 
-Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 7.8:
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 8.5:
 
 ```bash
 docker run \
     -d --name singlestoredb-dev \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
-    -e SINGLESTORE_VERSION="7.8" \
+    -e SINGLESTORE_VERSION="8.5" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
@@ -374,7 +376,7 @@ To tune this performance impact (either faster or slower) you can change the num
 [gh-issues]: https://github.com/singlestore-labs/singlestoredb-dev-image/issues
 [forums]: https://www.singlestore.com/forum/
 [portal]: https://portal.singlestore.com/
-[data-api]: https://docs.singlestore.com/managed-service/en/reference/data-api.html
+[data-api]: https://docs.singlestore.com/cloud/reference/data-api/
 [docker-resource-docs]: https://docs.docker.com/desktop/settings/mac/#advanced
-[global-vars]: https://docs.singlestore.com/db/latest/en/reference/configuration-reference/engine-variables/engine-variables.html
-[wasm]: https://docs.singlestore.com/db/v8.0/en/reference/code-engine---powered-by-wasm.html
+[global-vars]: https://docs.singlestore.com/db/latest/reference/configuration-reference/engine-variables/engine-variables/
+[wasm]: https://docs.singlestore.com/db/latest/reference/code-engine-powered-by-wasm/
