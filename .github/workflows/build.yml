@@ -49,6 +49,18 @@ jobs:
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
             CONFIG=${{ env.CONFIG }}
 
+      - name: Remove large and unnecessary packages
+        run: |
+          echo "BEFORE CLEANUP: " $(df -a $1 | awk 'NR > 1 {avail+=$4} END {print avail}') || true
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          sudo rm -rf /usr/local/.ghcup || true
+          sudo apt-get remove -y '^aspnetcore-.*' || echo "::warning::The command [sudo apt-get remove -y '^aspnetcore-.*'] failed to complete successfully. Proceeding..." 
+          sudo apt-get remove -y '^dotnet-.*' --fix-missing || echo "::warning::The command [sudo apt-get remove -y '^dotnet-.*' --fix-missing] failed to complete successfully. Proceeding..."
+          sudo apt-get clean || echo "::warning::The command [sudo apt-get clean] failed to complete successfully. Proceeding..."
+          echo "AFTER CLEANUP: " $(df -a $1 | awk 'NR > 1 {avail+=$4} END {print avail}') || true
+
       - name: run tests
         run: |
           ./test/test.sh singlestore-labs/singlestoredb-dev
@@ -126,11 +138,6 @@ jobs:
           SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
     steps:
-      - name: free up disk space
-        uses: jlumbroso/free-disk-space@main
-        with:
-            tool-cache: false
-
       - name: sanity check using mysql client
         run: |
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
