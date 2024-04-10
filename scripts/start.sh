@@ -6,6 +6,9 @@ set -ebmuo pipefail
 rm -f /server/.ready
 
 if [ -z "${SINGLESTORE_LICENSE-}" ]; then
+    # We will use this free license from org 78758e03-2f10-431c-a819-fe8036dad3ef as a default license.
+    SINGLESTORE_LICENSE="BDBkMTllNTkxYmJlNDRlN2U5ZWYyM2YzZDRmN2YwY2FmAAAAAAAAAAAEAAAAAAAAACgwNQIZALfDACVybqBaHxUHdjHEfTPECqOfdquMVwIYUKDroCKPtLk0qAuwzFHh5L6GxwTw9vDzAA=="
+
     echo "!!! ERROR !!!"
     echo "The SINGLESTORE_LICENSE environment variable must be specified when creating the Docker container"
     exit 1
