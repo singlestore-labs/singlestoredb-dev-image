@@ -31,7 +31,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 
 ## How to run the Docker image?
 
-**[Sign up][try-free] for a free SingleStore license**. This allows you to run up to 4 nodes up to 32 gigs each for free. Grab your license key from [SingleStore portal][portal] to use in the docker run command below.
+This image allows you to run up to 4 nodes up with 32 GBs of RAM for free on each.
 
 > **Note**
 > We recommend using an explicit image version tag whenever possible. You can find a [list of image tags here][versions] and inspect [the changelog here][changelog].
@@ -45,7 +45,6 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
@@ -64,7 +63,6 @@ Third, run the following command to start SingleStore. Note the `--platform linu
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
     --platform linux/amd64 \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
@@ -76,7 +74,7 @@ docker run \
 Windows Powershell and Command Prompt (CMD) work best if you run the command on a single line. Alternatively you can use backticks for multi-line strings in Powershell. Either way, the following single-line version of the command will work on Windows.
 
 ```bash
-docker run -d --name singlestoredb-dev -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" -p 3306:3306 -p 8080:8080 -p 9000:9000 ghcr.io/singlestore-labs/singlestoredb-dev:latest
+docker run -d --name singlestoredb-dev -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" -p 3306:3306 -p 8080:8080 -p 9000:9000 ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
 ## How to open a SQL shell?
@@ -160,7 +158,6 @@ This Docker image has Wasm functions enabled by default. You can learn how to co
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     -v my_cool_volume:/data \
@@ -189,7 +186,6 @@ One way to do this is mounting a `init.sql` from your machine into the container
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     -v ${PWD}/test/init.sql:/init.sql \
@@ -210,7 +206,6 @@ For example, if you want to set `default_partitions_per_leaf` to 1, you would do
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -e SINGLESTORE_SET_GLOBAL_DEFAULT_PARTITIONS_PER_LEAF=1 \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
