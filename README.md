@@ -50,6 +50,17 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
+If you want to configure a specific license, simply pass it as an environment variable:
+
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
+    ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
 ### How to run the Docker image on **Apple Silicon** (M1/M2 chips)?
 
 First, make sure you are using Docker desktop which supports the latest virtualization technology on Apple Silicon machines.
@@ -257,7 +268,6 @@ Here is an example of using the `SINGLESTORE_VERSION` environment variable to ru
 ```bash
 docker run \
     -d --name singlestoredb-dev \
-    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
     -e SINGLESTORE_VERSION="8.5" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
@@ -295,7 +305,8 @@ jobs:
           - 9000:9000
         env:
           ROOT_PASSWORD: test
-          SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
+          # Optional:
+          # SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
     steps:
       - name: sanity check using mysql client
@@ -308,7 +319,7 @@ jobs:
 Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately Gitlab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [three year old issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in Gitlab, so hopefully this can be simplified eventually.
 
 > **Note**
-> Make sure you add your SingleStore license key to Gitlab secrets under the key `SINGLESTORE_LICENSE`.
+> You can add your SingleStore license key to Gitlab secrets under the key `SINGLESTORE_LICENSE`.
 
 ```yaml
 image: debian
@@ -318,7 +329,8 @@ stages:
 
 variables:
     ROOT_PASSWORD: test
-    SINGLESTORE_LICENSE: $SINGLESTORE_LICENSE
+    # Optional:
+    # SINGLESTORE_LICENSE: $SINGLESTORE_LICENSE
 
 testing:
   stage: test
