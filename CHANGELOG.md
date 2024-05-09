@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.22 - 2024-05-08
+ - SingleStoreDB Version 8.5.19
+
 ## 0.2.21 - 2024-04-26
  - The image no longer requires a license key to be passed in
 
