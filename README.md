@@ -36,7 +36,7 @@ This Docker image allows up to 4 leaf nodes to be run on a machine (host) that h
 When running a Docker container, either with or without a [free edition license](https://www.singlestore.com/self-managed-standard/), on a machine with:
 
 * More than 32 cores, include the `--cpus=32` option.
-* More than 128GB of RAM, include the `--memory=128` option.
+* More than 128GB of RAM, include the `--memory=128m` option.
 
 Refer to [What are license units and how do they apply to my cluster?](https://docs.singlestore.com/db/latest/introduction/faqs/general/#what-are-license-units-and-how-do-they-apply-to-my-cluster) for more information on license units and how they are calculated.
 > **Note:**
