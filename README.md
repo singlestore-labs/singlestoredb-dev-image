@@ -69,7 +69,7 @@ docker run \
 
 First, make sure you are using Docker desktop which supports the latest virtualization technology on Apple Silicon machines.
 
-Second, **you must enable "Use the new Virtualization framework" and "Use Rosetta for x86_64/amd64 emulation on Apple Silicon" in Docker Desktop preferences**. If you do not do this, SingleStore will run very slowly and consume a lot of power on your Mac. You can find these settings under Docker Desktop > Preferences > General.
+Second, **you must enable "Use Virtualization framework" and "Use Rosetta for x86_64/amd64 emulation on Apple Silicon" in Docker Desktop preferences**. If you do not do this, SingleStore will run very slowly and consume a lot of power on your Mac. You can find these settings under Docker Desktop > Preferences > General.
 
 ![Screenshot of enabling the new Virtualization framework in Docker's preferences](.github/osx_docker_new_prefs.jpeg)
 
