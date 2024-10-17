@@ -1,4 +1,7 @@
 # Changelog
+## 0.2.36 - 2024-10-17
+- SingleStoreDB Version 8.7.17
+
 ## 0.2.35 - 2024-10-16
  - Added OpenJDK 21 to support FTS v2.
 
