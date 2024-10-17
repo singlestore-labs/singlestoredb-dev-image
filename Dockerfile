@@ -18,6 +18,13 @@ RUN yum makecache --refresh && \
     yum update -y expat libxml2 libgcrypt && \
     yum clean all
 
+RUN cd /tmp && \
+    wget https://download.java.net/openjdk/jdk21/ri/openjdk-21+35_linux-x64_bin.tar.gz && \
+    tar xzvf openjdk-21+35_linux-x64_bin.tar.gz && \
+    mv jdk-21 /usr/local/ && \
+    rm -f openjdk-21+35_linux-x64_bin.tar.gz && \
+    cd ..
+
 ENV JQ_VERSION='1.6'
 RUN wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/master/sig/jq-release-old.key -O /tmp/jq-release.key && \
     wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/master/sig/v${JQ_VERSION}/jq-linux64.asc -O /tmp/jq-linux64.asc && \

@@ -304,6 +304,23 @@ test_external_functions() {
 }
 TESTS+=("test_external_functions")
 
+test_fts() {
+    docker_run
+
+    query_master "create database fts"
+    local auth=$(echo -n "root:test" | base64)
+    query_master "create table fts.fts(t text, fulltext using version 2 (t))"
+    query_master "insert into fts.fts values ('hello'), ('world')"
+    query_master "optimize table fts.fts full"
+
+    COUNT=$(query_master "select bm25(f, 't:hello') as h from fts.fts f" | jq -cr '.rows[]' | wc -l)
+    if [ $COUNT -ne 2 ] ; then
+        echo fts test failed: ${OUTPUT}
+        exit 1
+    fi
+}
+TESTS+=("test_fts")
+
 test_auto_restart() {
     local exit_code
 

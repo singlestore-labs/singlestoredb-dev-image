@@ -44,6 +44,8 @@ sdb-admin -y add-leaf --host 127.0.0.1 --port 3307 --password ${INIT_PW}
 
 sdb-admin -y update-config --all --set-global --key enable_external_functions --value on
 sdb-admin -y update-config --all --set-global --key http_api --value on
+sdb-admin -y update-config --all --set-global --key fts2_java_path --value /usr/local/jdk-21/bin/java
+sdb-admin -y update-config --all --set-global --key fts2_java_home --value /usr/local/jdk-21
 
 isEngineVersionGE()
 {
