@@ -1,6 +1,6 @@
 {
   "channel": "production",
-  "server": "8.7.18-38cd977479",
+  "server": "8.7.19-198acf9488",
   "toolbox": "1.17.4",
   "client": "1.0.7",
   "studio": "4.0.14"
