@@ -1,4 +1,8 @@
 # Changelog
+
+## 0.2.39 - 2024-11-15
+- SingleStoreDB Version 8.9.1
+
 ## 0.2.38 - 2024-11-05
 - SingleStoreDB Version 8.7.19
 
