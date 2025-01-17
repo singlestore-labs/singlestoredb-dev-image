@@ -102,7 +102,7 @@ docker exec -it singlestoredb-dev singlestore -p
 The above command will prompt you for the root password. You can also provide the root password at the command line immediately after the `-p` flag like so:
 
 ```bash
-docker exec -it singlestoredb-dev singlestore -p YOUR_ROOT_PASSWORD
+docker exec -it singlestoredb-dev singlestore -pYOUR_ROOT_PASSWORD
 ```
 
 You can also connect to SingleStore using any MySQL compatible client on your own machine using the following connection details:
