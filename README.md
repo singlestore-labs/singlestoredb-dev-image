@@ -240,12 +240,13 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 8.7                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
-| 8.5                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
-| 8.1                                      | SingleStore Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
-| 8.0                                      | SingleStore Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
-| 7.8                                      | SingleStore Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
-| 7.6                                      | SingleStore Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
+| 8.9                                      | SingleStoreDB Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
+| 8.7                                      | SingleStoreDB Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
+| 8.5                                      | SingleStoreDB Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
+| 8.1                                      | SingleStoreDB Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
+| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
+| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
+| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
 
 ### How to build a custom version of this Docker Image with a specific SingleStore Version?
 
@@ -267,13 +268,13 @@ In order to use a specific version of SingleStore at runtime, you can start the 
 > **Warning**
 > This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStore each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
 
-Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStore 8.7:
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 8.9:
 
 ```bash
 docker run \
     -d --name singlestoredb-dev \
     -e ROOT_PASSWORD="YOUR ROOT PASSWORD" \
-    -e SINGLESTORE_VERSION="8.7" \
+    -e SINGLESTORE_VERSION="8.9" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```

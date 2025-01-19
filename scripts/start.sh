@@ -30,9 +30,8 @@ fi
 # check to see if we need to switch versions at runtime
 if [ -n "${SINGLESTORE_VERSION-}" ]; then
     CURRENT_VERSION=$(memsqlctl -j version | jq -r '"\(.version)-\(.commitHash[0:10])"')
-    TARGET_VERSION="${SINGLESTORE_VERSION%%:*}"
-    if [ "${CURRENT_VERSION}" != "${TARGET_VERSION}" ]; then
-        echo "Switching SingleStore version from '${CURRENT_VERSION}' to '${TARGET_VERSION}'"
+    if [[ "$CURRENT_VERSION" != "$SINGLESTORE_VERSION"* ]]; then
+        echo "Switching SingleStore version from '${CURRENT_VERSION}' to '${SINGLESTORE_VERSION}'"
         /scripts/switch-version.sh "${SINGLESTORE_VERSION}" "${SINGLESTORE_LICENSE}"
     fi
 fi
