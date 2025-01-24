@@ -500,9 +500,10 @@ TESTS+=("test_set_global")
 
 test_kai() {
     docker_run_kai
-    # this is a binary handshake and list databases command, if we see the
-    # information_schema database in the output then we know kai is working
-    docker_exec echo \
+    # this is a binary handshake and list databases command, followed by some invalid 
+    # bytes so the server closes the connection. If we see the information_schema 
+    # database in the output then we know kai is working
+    echo \
     6d0000001a00000000000000dd0700000100000000540000001069734d6173746572000100000008 \
     6c6f616442616c616e6365640001036c736964001e0000000569640010000000049214bd5329704a \
     8fb613cacad4ee22f0000224646200050000007465737400004eb562dd8f0000001e000000000000 \
@@ -511,8 +512,13 @@ test_kai() {
     65000100057061796c6f6164000e00000000726f6f7400726f6f7400746573740224646200060000 \
     0061646d696e0000857e41c3670000000400000000000000dd07000001000000004e000000016c69 \
     737444617461626173657300000000000000f03f036c736964001e0000000569640010000000049a \
-    37f23630764443a379823b4e08b22400022464620005000000746573740000b177fe52 | \
-    xxd -r -p | nc -q 1 127.0.0.1 27017 | grep "information_schema"
+    37f23630764443a379823b4e08b22400022464620005000000746573740000b177fe52 000000000 | \
+    while read -r hex; do
+        printf "%b" "$(echo "$hex" | sed 's/ //g; s/../\\x&/g')" > ./request.bin
+    done
+    docker cp ./request.bin ${CURRENT_CONTAINER_ID}:/request.bin
+    rm request.bin
+    docker exec ${CURRENT_CONTAINER_ID} bash -c "exec 3<>/dev/tcp/127.0.0.1/27017;cat /request.bin >&3;cat <&3|grep information_schema"
     if [[ $? -ne 0 ]]; then
         echo "Kai test failed"
         exit 1
