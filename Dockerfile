@@ -1,4 +1,7 @@
-FROM almalinux:8.6-20220901
+
+ARG KAI_VERSION # Since KAI_VERSION is used for a FROM later; must be declared before first FROM (of any image)
+FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION as kai
+FROM almalinux:8.6-20220901 AS base
 
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
@@ -53,6 +56,7 @@ RUN /scripts/setup-singlestore-user.sh
 RUN mkdir -p /server && chown -R singlestore:singlestore /server
 RUN mkdir -p /data && chown -R singlestore:singlestore /data
 RUN mkdir -p /logs && chown -R singlestore:singlestore /logs
+RUN mkdir -p /kai && chown -R singlestore:singlestore /kai
 
 # remove /var/lib/memsql, this image uses /data and /logs to store everything
 # we also need to be able to detect when we are upgrading from the old cluster in a box image
@@ -92,6 +96,9 @@ ADD licenses /licenses
 ADD scripts/healthcheck.sh /scripts/healthcheck.sh
 HEALTHCHECK --interval=5s --timeout=5s --start-period=90s --retries=3 CMD /scripts/healthcheck.sh
 
+COPY --from=kai / /kai
+
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp
 EXPOSE 9000/tcp
+EXPOSE 27017/tcp
