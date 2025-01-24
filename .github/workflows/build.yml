@@ -33,7 +33,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: echo "CONFIG="$(cat config.json)"" >> ${GITHUB_ENV}
+        run: |
+          echo "CONFIG="$(jq 'del(.kai)' config.json | tr '\n' ' ')"" >> ${GITHUB_ENV}
+          echo "KAI_VERSION="$(jq -r .kai config.json)"" >> ${GITHUB_ENV}
 
       - name: Build image for testing
         uses: docker/build-push-action@v4
@@ -48,6 +50,7 @@ jobs:
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
             CONFIG=${{ env.CONFIG }}
+            KAI_VERSION=${{ env.KAI_VERSION }}
 
       - name: Remove large and unnecessary packages
         run: |
@@ -94,7 +97,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: prepare build environment
-        run: echo "CONFIG="$(cat config.json)"" >> ${GITHUB_ENV}
+        run: |
+          echo "CONFIG="$(jq 'del(.kai)' config.json | tr '\n' ' ')"" >> ${GITHUB_ENV}
+          echo "KAI_VERSION="$(jq -r .kai config.json)"" >> ${GITHUB_ENV}
 
       - name: Docker meta
         id: meta
@@ -120,6 +125,7 @@ jobs:
           build-args: |
             BOOTSTRAP_LICENSE=${{ secrets.BOOTSTRAP_LICENSE }}
             CONFIG=${{ env.CONFIG }}
+            KAI_VERSION=${{ env.KAI_VERSION }}
 
   test-service:
     runs-on: ubuntu-latest

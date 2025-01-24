@@ -1,6 +1,6 @@
 
 ARG KAI_VERSION # Since KAI_VERSION is used for a FROM later; must be declared before first FROM (of any image)
-FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION as kai
+FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION AS kai
 FROM almalinux:8.6-20220901 AS base
 
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
