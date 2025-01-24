@@ -70,6 +70,20 @@ docker_run() {
     wait_for_all_dbs_online 30
 }
 
+docker_run_kai() {
+    CURRENT_CONTAINER_ID=$(
+        docker run -d \
+            -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \
+            -e ROOT_PASSWORD=test \
+            -e ENABLE_KAI=1 \
+            "${@}" \
+            ${IMAGE}
+    )
+
+    wait_for_healthy ${CURRENT_CONTAINER_ID} 90
+    wait_for_all_dbs_online 30
+}
+
 docker_exec() {
     if [[ -z "${CURRENT_CONTAINER_ID}" ]]; then
         echo "No container running"
@@ -483,6 +497,28 @@ test_set_global() {
     fi
 }
 TESTS+=("test_set_global")
+
+test_kai() {
+    docker_run_kai
+    # this is a binary handshake and list databases command, if we see the
+    # information_schema database in the output then we know kai is working
+    docker_exec echo \
+    6d0000001a00000000000000dd0700000100000000540000001069734d6173746572000100000008 \
+    6c6f616442616c616e6365640001036c736964001e0000000569640010000000049214bd5329704a \
+    8fb613cacad4ee22f0000224646200050000007465737400004eb562dd8f0000001e000000000000 \
+    00dd070000010000000076000000107361736c53746172740001000000026d656368616e69736d00 \
+    06000000504c41494e00036f7074696f6e73001900000008736b6970456d70747945786368616e67 \
+    65000100057061796c6f6164000e00000000726f6f7400726f6f7400746573740224646200060000 \
+    0061646d696e0000857e41c3670000000400000000000000dd07000001000000004e000000016c69 \
+    737444617461626173657300000000000000f03f036c736964001e0000000569640010000000049a \
+    37f23630764443a379823b4e08b22400022464620005000000746573740000b177fe52 | \
+    xxd -r -p | nc -q 1 127.0.0.1 27018 | grep "information_schema"
+    if [[ $? -ne 0 ]]; then
+        echo "Kai test failed"
+        exit 1
+    fi
+}
+TESTS+=("test_kai")
 
 run_test() {
     echo "Running ${1}..."
