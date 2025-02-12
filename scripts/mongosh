@@ -10,4 +10,4 @@ exec "/usr/bin/mongosh" \
   -u "root" \
   -p "${ROOT_PASSWORD}" \
   "${@}" \
-  "mongodb://127.0.0.1:27017/?authMechanism=PLAIN&tls=true&loadBalanced=true"
+  "mongodb://localhost:27017/?authMechanism=PLAIN&loadBalanced=true"
