@@ -43,6 +43,13 @@ RUN wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/mast
 ARG BOOTSTRAP_LICENSE
 ARG CONFIG
 
+RUN yum-config-manager --add-repo https://repo.mongodb.org/yum/redhat/9/mongodb-org/8.0/x86_64/ && \
+    yum-config-manager --save --setopt=repo.mongodb.org_yum_redhat_9_mongodb-org_8.0_x86_64_.gpgkey=https://www.mongodb.org/static/pgp/server-8.0.asc && \
+    yum install -y mongodb-mongosh && \
+    yum -y clean all
+
+ADD scripts/mongosh /usr/local/bin/mongosh
+
 RUN yum-config-manager --add-repo https://release.memsql.com/$(echo "${CONFIG}" | jq -r .channel)/rpm/x86_64/repodata/memsql.repo && \
     yum install -y \
     singlestore-client-$(echo "${CONFIG}" | jq -r .client) \

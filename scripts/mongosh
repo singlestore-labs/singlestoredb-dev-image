@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -uf
+
+# shellcheck disable=SC2034
+# CURRENT_DIR is used in the replacements of BIN_PATH and PLUGIN_DIR placeholders
+CURRENT_DIR=$(dirname "$(readlink -f "${0}")")
+
+exec "/usr/bin/mongosh" \
+  -u "root" \
+  -p "${ROOT_PASSWORD}" \
+  "${@}" \
+  "mongodb://127.0.0.1:27017/?authMechanism=PLAIN&tls=true&loadBalanced=true"
