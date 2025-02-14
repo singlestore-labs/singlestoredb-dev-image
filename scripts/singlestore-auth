@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -uf
+
+# shellcheck disable=SC2034
+# CURRENT_DIR is used in the replacements of BIN_PATH and PLUGIN_DIR placeholders
+CURRENT_DIR=$(dirname "$(readlink -f "${0}")")
+
+exec "/usr/lib/singlestore-client/singlestore-client" \
+  --no-defaults \
+  --plugin-dir="/usr/lib/singlestore-client/plugin" \
+  --protocol=tcp \
+  --prompt="singlestore> " \
+  -u root \
+  -P 3306 \
+  --password="${ROOT_PASSWORD}" \
+  "${@}"

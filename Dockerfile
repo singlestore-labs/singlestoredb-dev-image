@@ -49,6 +49,8 @@ RUN yum-config-manager --add-repo https://repo.mongodb.org/yum/redhat/9/mongodb-
     yum -y clean all
 
 ADD scripts/mongosh /usr/local/bin/mongosh
+ADD scripts/mongosh-auth /usr/local/bin/mongosh-auth
+ADD scripts/singlestore-auth /usr/local/bin/singlestore-auth
 
 RUN yum-config-manager --add-repo https://release.memsql.com/$(echo "${CONFIG}" | jq -r .channel)/rpm/x86_64/repodata/memsql.repo && \
     yum install -y \
