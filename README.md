@@ -1,7 +1,7 @@
-# SingleStoreDB Dev Image <!-- omit in toc -->
+# SingleStore Dev Image <!-- omit in toc -->
 [![Github Actions status image](https://github.com/singlestore-labs/singlestoredb-dev-image/actions/workflows/build.yml/badge.svg)](https://github.com/singlestore-labs/singlestoredb-dev-image/actions)
 
-The SingleStoreDB Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment (including [Github Actions][header-gh-actions]). This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
+The SingleStore Dev Image is the fastest way to develop with [SingleStore][singlestore] on your laptop or in a CI/CD environment (including [Github Actions][header-gh-actions]). This Docker image is **not supported for production workloads or benchmarks** so please keep that in mind when using it.
 
 If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums].
 
@@ -13,27 +13,27 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
   - [How to run the Docker image on **Windows**?](#how-to-run-the-docker-image-on-windows)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
-- [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
+- [Where can I learn how to use SingleStore?](#where-can-i-learn-how-to-use-singlestoredb)
 - [How to access the Data API?](#how-to-access-the-data-api)
 - [How to use WebAssembly (Wasm) backed functions?](#how-to-use-webassembly-wasm-backed-functions)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
-- [How to set SingleStoreDB Global Variables?](#how-to-set-singlestoredb-global-variables)
-- [How to use a specific SingleStoreDB version?](#how-to-use-a-specific-singlestoredb-version)
-  - [What are some known SingleStoreDB versions?](#what-are-some-known-singlestoredb-versions)
+- [How to set SingleStore Global Variables?](#how-to-set-singlestoredb-global-variables)
+- [How to use a specific SingleStore version?](#how-to-use-a-specific-singlestoredb-version)
+  - [What are some known SingleStore versions?](#what-are-some-known-singlestoredb-versions)
   - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
-  - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
+  - [How to specify a SingleStore version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
-  - [How to run SingleStoreDB in Github Actions?](#how-to-run-singlestoredb-in-github-actions)
-  - [How to run SingleStoreDB in Gitlab CI/CD?](#how-to-run-singlestoredb-in-gitlab-cicd)
+  - [How to run SingleStore in Github Actions?](#how-to-run-singlestoredb-in-github-actions)
+  - [How to run SingleStore in Gitlab CI/CD?](#how-to-run-singlestoredb-in-gitlab-cicd)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 - [Apple Silicon (M1/M2 chips) performance notes](#apple-silicon-m1m2-chips-performance-notes)
 
 ## How to run the Docker image?
 
-This Docker image allows up to 4 leaf nodes to be run on a machine (host) that has up to 32 cores and up to 128GB of RAM without the need for a license.
+This Docker image can be allocated up to 8 cores and up to 32 GB of RAM without the need for a license.
 
-When running a Docker container, either with or without a [free edition license](https://www.singlestore.com/self-managed-standard/), on a machine with:
+When running a Docker container, either with or without a license, on a machine with:
 
 * More than 32 cores, include the `--cpus=32` option.
 * More than 128GB of RAM, include the `--memory=128g` option.
@@ -133,11 +133,11 @@ You can also connect to SingleStore using any MySQL compatible client on your ow
 
 ## How to access the SingleStore Studio UI?
 
-SingleStore Studio is a convenient way to manage SingleStoreDB and run queries via a browser based UI. Studio runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access studio at http://localhost:8080.
+SingleStore Studio is a convenient way to manage SingleStore and run queries via a browser based UI. Studio runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access studio at http://localhost:8080.
 
 When opening Studio you will see a login screen. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
 
-## Where can I learn how to use SingleStoreDB?
+## Where can I learn how to use SingleStore?
 
 Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
 
@@ -170,14 +170,14 @@ In addition to supporting the MySQL Protocol, SingleStore also has a JSON over H
 
 ## How to use WebAssembly (Wasm) backed functions?
 
-The Code Engine feature in SingleStoreDB supports creating functions (UDFs and
+The Code Engine feature in SingleStore supports creating functions (UDFs and
 TVFs) using code compiled to WebAssembly (Wasm). This feature supports any
 language that can compile to the Wasm core specification, which allows you to
 create UDFs in a language of your choice using existing code libraries and run
 them in a sandboxed environment for enhanced security. It uses a linear memory
 model and provides hard memory protection boundaries.
 
-This Docker image has Wasm functions enabled by default. You can learn how to compile and load Wasm UDFs and UDAs into SingleStoreDB [on our docs][wasm].
+This Docker image has Wasm functions enabled by default. You can learn how to compile and load Wasm UDFs and UDAs into SingleStore [on our docs][wasm].
 
 ## How to use Docker volumes for persistent storage?
 
@@ -195,7 +195,7 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
-After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without loosing your data. Keep in mind that SingleStoreDB does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
+After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without loosing your data. Keep in mind that SingleStore does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
 
 > **Note**
 > In order to mount a host volume to the `/data` directory, you will need to chown the volume to UID=999 and GID=998 before mounting it. The volume will be initialized automatically if empty. Host volumes are only supported by the `/data` directory.
@@ -204,13 +204,13 @@ This Docker image has a number of volume mount points in addition to `/data`. He
 
 | mount path | description                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ |
-| /data      | All of the data, config, and cache for the SingleStoreDB cluster.                                                  |
+| /data      | All of the data, config, and cache for the SingleStore cluster.                                                  |
 | /logs      | All of the tracelog files containing information that can help debug the cluster or observe it's current behavior. |
 | /server    | The installation directory containing server binaries and other installation state.                                |
 
 ## How to initialize this container with a SQL file?
 
-When this docker image starts for the first time it will check to see if an `init.sql` file exists in its filesystem. The default location is `/init.sh`, but it can be customized via the `INIT_SQL` environment variable. If `init.sql` is found, the container will run it against the database as soon as SingleStoreDB is ready.
+When this docker image starts for the first time it will check to see if an `init.sql` file exists in its filesystem. The default location is `/init.sh`, but it can be customized via the `INIT_SQL` environment variable. If `init.sql` is found, the container will run it against the database as soon as SingleStore is ready.
 
 One way to do this is mounting a `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
 
@@ -228,9 +228,9 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
 
-## How to set SingleStoreDB Global Variables?
+## How to set SingleStore Global Variables?
 
-SingleStoreDB can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStoreDB Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
+SingleStore can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStore Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
 
 For example, if you want to set `default_partitions_per_leaf` to 1, you would do this:
 
@@ -243,29 +243,29 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
-Multiple environment variables can be specified if you want to configure multiple global variables in SingleStoreDB.
+Multiple environment variables can be specified if you want to configure multiple global variables in SingleStore.
 
-If you specify a variable which is not supported by SingleStoreDB, the image will fail to start. You can see the full error message by inspecting the failed docker container's logs using `docker log`.
+If you specify a variable which is not supported by SingleStore, the image will fail to start. You can see the full error message by inspecting the failed docker container's logs using `docker log`.
 
-## How to use a specific SingleStoreDB version?
+## How to use a specific SingleStore version?
 
-The SingleStoreDB Dev Image uses the latest SingleStoreDB version available in the managed service by default. If you would prefer to use another SingleStoreDB version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
+The SingleStore Dev Image uses the latest SingleStore version available in the managed service by default. If you would prefer to use another SingleStore version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
 
-### What are some known SingleStoreDB versions?
+### What are some known SingleStore versions?
 
-You can use the version numbers in the first column of the following table in order to run a specific version of SingleStoreDB. If you want to use a particular patch version, just specify that version instead.
+You can use the version numbers in the first column of the following table in order to run a specific version of SingleStore. If you want to use a particular patch version, just specify that version instead.
 
 | `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 8.9                                      | SingleStoreDB Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
-| 8.7                                      | SingleStoreDB Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
-| 8.5                                      | SingleStoreDB Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
-| 8.1                                      | SingleStoreDB Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
-| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
-| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
-| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
+| 8.9                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
+| 8.7                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
+| 8.5                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
+| 8.1                                      | SingleStore Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
+| 8.0                                      | SingleStore Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
+| 7.8                                      | SingleStore Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
+| 7.6                                      | SingleStore Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
 
-### How to build a custom version of this Docker Image with a specific SingleStoreDB Version?
+### How to build a custom version of this Docker Image with a specific SingleStore Version?
 
 The script `/scripts/switch-version.sh` can be used to easily build a custom version of this image. The fastest way to do this is using Docker build like so:
 
@@ -276,16 +276,16 @@ RUN /scripts/switch-version.sh SINGLESTORE_VERSION SINGLESTORE_LICENSE
 EOF
 ```
 
-Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use (see table above) as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStoreDB installed and ready to use.
+Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use (see table above) as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStore installed and ready to use.
 
-### How to specify a SingleStoreDB version at runtime?
+### How to specify a SingleStore version at runtime?
 
-In order to use a specific version of SingleStoreDB at runtime, you can start the Docker container with the `SINGLESTORE_VERSION` environment variable set.
+In order to use a specific version of SingleStore at runtime, you can start the Docker container with the `SINGLESTORE_VERSION` environment variable set.
 
 > **Warning**
-> This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStoreDB each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
+> This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStore each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
 
-Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 8.9:
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStore 8.9:
 
 ```bash
 docker run \
@@ -297,7 +297,7 @@ docker run \
 ```
 
 > **Note**
-> You can mount `/server` into a Docker volume to preserve the installed SingleStoreDB server binaries if you are unable to use the [custom image method]. This will increase subsequent startup performance at the expense of complexity.
+> You can mount `/server` into a Docker volume to preserve the installed SingleStore server binaries if you are unable to use the [custom image method]. This will increase subsequent startup performance at the expense of complexity.
 
 [custom image method]: #how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version
 
@@ -305,7 +305,7 @@ docker run \
 
 This Docker image defines a healthcheck which runs every 5 seconds. Any CI/CD system or container runtime which respects the healthcheck should automatically wait for SingleStore to be running and healthy.
 
-### How to run SingleStoreDB in Github Actions?
+### How to run SingleStore in Github Actions?
 
 Here is an example workflow which runs SingleStore as a container service and queries it from the job.
 
@@ -336,7 +336,7 @@ jobs:
           mysql -u root -ptest -e "SELECT 1" -h 127.0.0.1
 ```
 
-### How to run SingleStoreDB in Gitlab CI/CD?
+### How to run SingleStore in Gitlab CI/CD?
 
 Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately Gitlab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [three year old issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in Gitlab, so hopefully this can be simplified eventually.
 
@@ -394,7 +394,7 @@ In all cases we recommend using the new image unless you need to run a older ver
 
 ## Apple Silicon (M1/M2 chips) performance notes
 
-In order to support running SingleStoreDB on Apple Silicon many of our performance optimizations are disabled. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStoreDB) and when running queries for the first time.
+In order to support running SingleStore on Apple Silicon many of our performance optimizations are disabled. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStore) and when running queries for the first time.
 
 To tune this performance impact (either faster or slower) you can change the number of cores and amount of RAM allocated to the Docker virtual machine by [following the documentation here][docker-resource-docs].
 
