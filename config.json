@@ -1,5 +1,6 @@
 {
   "channel": "production",
+  "engine_channel": "rc",
   "server": "9.0.1-12591754b4",
   "toolbox": "1.18.2",
   "client": "1.0.7",

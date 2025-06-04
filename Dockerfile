@@ -89,7 +89,7 @@ RUN sdb-toolbox-config -y register-host \
     --tar-install-dir /server
 
 ADD scripts/install.sh /scripts/install.sh
-RUN /scripts/install.sh "$(echo "${CONFIG}" | jq -r .channel):$(echo "${CONFIG}" | jq -r .server)"
+RUN /scripts/install.sh "$(echo "${CONFIG}" | jq -r .engine_channel):$(echo "${CONFIG}" | jq -r .server)"
 
 ADD scripts/memsqlctl /bin/memsqlctl
 ADD scripts/init.sh /scripts/init.sh
