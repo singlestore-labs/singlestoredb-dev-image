@@ -467,7 +467,7 @@ TESTS+=("test_upgrade")
 
 # this test should verify that we can switch the version at runtime
 test_switch_version() {
-    local target_version=7.8.13
+    local target_version=8.9.24
     docker_run -e SINGLESTORE_VERSION=${target_version}
 
     local version=$(query_master "select @@memsql_version" | jq -r '.rows[0]."@@memsql_version"')
