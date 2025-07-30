@@ -30,26 +30,9 @@ jobs:
           files: |
             config.json
 
-      - name: Check for config.json changes
-        id: check_changes
-        run: |
-          echo "All changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
-
-          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
-
-          if [[ "$CHANGED_FILES" == *"config.json"* ]]; then
-            echo "✅ config.json was modified"
-            echo "should_tag=true" >> $GITHUB_OUTPUT
-          else
-            echo "❌ config.json was not modified"
-            echo "Changed files: $CHANGED_FILES"
-            echo "should_tag=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Extract version and create tag
-        if: steps.check_changes.outputs.should_tag == 'true'
+        if: steps.changed-files.outputs.only_changed
         run: |
-          # Configure git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
@@ -62,7 +45,6 @@ jobs:
           git push "$TAG_NAME"
           
           echo "Successfully created and pushed tag: $TAG_NAME"
-
 
   build-and-test-image:
     runs-on: ubuntu-latest
