@@ -15,6 +15,55 @@ env:
   SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
 jobs:
+  auto-tag:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v46
+        with:
+          files: |
+            config.json
+
+      - name: Check for config.json changes
+        id: check_changes
+        run: |
+          echo "All changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
+
+          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+
+          if [[ "$CHANGED_FILES" == *"config.json"* ]]; then
+            echo "✅ config.json was modified"
+            echo "should_tag=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ config.json was not modified"
+            echo "Changed files: $CHANGED_FILES"
+            echo "should_tag=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Extract version and create tag
+        if: steps.check_changes.outputs.should_tag == 'true'
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Extract most recent tag published and increment one top of it.
+          TAG_NAME=$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')
+          
+          echo "Creating tag: $TAG_NAME"
+          
+          git tag "$TAG_NAME"
+          git push "$TAG_NAME"
+          
+          echo "Successfully created and pushed tag: $TAG_NAME"
+
+
   build-and-test-image:
     runs-on: ubuntu-latest
 
