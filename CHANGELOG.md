@@ -13,7 +13,7 @@
 - Upgrade the target_version in test_switch_version to 8.9.24
 
 ## 0.2.54 - 2025-06-04
-- SingleStoreDB Version 9.0.1
+- SingleStoreDB Version 9.0.1 on RC channel
 
 ## 0.2.53 - 2025-06-04
 - SingleStoreDB Version 9.0.1
