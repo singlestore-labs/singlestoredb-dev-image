@@ -1,13 +1,22 @@
 # Changelog
 
-## 0.2.55 - 2025-06-26
+## 0.2.58 - 2025-06-26
 - SingleStoreDB Version 9.0.6
 
-## 0.2.54 - 2025-06-18
+## 0.2.57 - 2025-06-18
 - SingleStoreDB Version 9.0.5
 
-## 0.2.53 - 2025-06-11
+## 0.2.56 - 2025-06-11
 - SingleStoreDB Version 9.0.3
+
+## 0.2.55 - 2025-06-04
+- Upgrade the target_version in test_switch_version to 8.9.24
+
+## 0.2.54 - 2025-06-04
+- SingleStoreDB Version 9.0.1
+
+## 0.2.53 - 2025-06-04
+- SingleStoreDB Version 9.0.1
 
 ## 0.2.52 - 2025-05-21
 - SingleStoreDB Version 8.9.24
