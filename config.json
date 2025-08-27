@@ -1,7 +1,7 @@
 {
   "channel": "production",
   "engine_channel": "rc",
-  "server": "9.0.6-f9163bfd6d",
+  "server": "9.0.7-19399eabae",
   "toolbox": "1.18.2",
   "client": "1.0.7",
   "studio": "4.0.14",
