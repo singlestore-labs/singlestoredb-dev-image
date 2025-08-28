@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
 
       - name: Get changed files
         id: changed-files
@@ -40,9 +42,9 @@ jobs:
           TAG_NAME=$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')
           
           echo "Creating tag: $TAG_NAME"
-          
+
           git tag "$TAG_NAME"
-          git push "$TAG_NAME"
+          git push origin "$TAG_NAME"
           
           echo "Successfully created and pushed tag: $TAG_NAME"
 
