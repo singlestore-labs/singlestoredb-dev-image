@@ -16,12 +16,16 @@ env:
 
 jobs:
   auto-tag:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # TEMP
+    # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
 
       - name: Get changed files
         id: changed-files
@@ -40,9 +44,10 @@ jobs:
           TAG_NAME=$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')
           
           echo "Creating tag: $TAG_NAME"
-          
-          git tag "$TAG_NAME"
-          git push "$TAG_NAME"
+
+          # TEMP
+          # git tag "$TAG_NAME"
+          # git push origin "$TAG_NAME"
           
           echo "Successfully created and pushed tag: $TAG_NAME"
 
