@@ -16,9 +16,7 @@ env:
 
 jobs:
   auto-tag:
-    # TEMP
-    # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
@@ -45,9 +43,8 @@ jobs:
           
           echo "Creating tag: $TAG_NAME"
 
-          # TEMP
-          # git tag "$TAG_NAME"
-          # git push origin "$TAG_NAME"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
           
           echo "Successfully created and pushed tag: $TAG_NAME"
 
