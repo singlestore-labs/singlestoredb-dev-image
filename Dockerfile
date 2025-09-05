@@ -5,8 +5,6 @@ FROM almalinux:10.0-20250825 AS base
 
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
-RUN rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
-
 RUN dnf upgrade -y almalinux-release && \
     yum -y clean all
 
