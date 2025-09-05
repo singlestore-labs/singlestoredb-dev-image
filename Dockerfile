@@ -9,7 +9,7 @@ RUN dnf upgrade -y almalinux-release && \
     yum -y clean all
 
 RUN yum makecache --refresh && \
-    yum install -y yum-utils wget procps java-11-openjdk && \
+    yum install -y yum-utils wget procps && \
     yum update -y curl && \
     yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
     yum -y update-minimal --setopt=tsflags=nodocs --nobest --security --sec-severity=Important --sec-severity=Critical && \
