@@ -1,9 +1,9 @@
 
 ARG KAI_VERSION # Since KAI_VERSION is used for a FROM later; must be declared before first FROM (of any image)
 FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION AS kai
-FROM almalinux:8.6-20220901 AS base
+FROM almalinux:10.0-20250825 AS base
 
-ARG SECURITY_UPDATES_AS_OF=2022-09-30
+ARG SECURITY_UPDATES_AS_OF=2022-08-25
 
 RUN rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
 
