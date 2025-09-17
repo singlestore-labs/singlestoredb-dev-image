@@ -2,7 +2,7 @@
   "channel": "production",
   "engine_channel": "rc",
   "server": "9.0.7-19399eabae",
-  "toolbox": "1.18.2",
+  "toolbox": "1.18.5",
   "client": "1.0.7",
   "studio": "4.0.14",
   "kai": "1.0.102"
