@@ -109,7 +109,9 @@ jobs:
           ${{steps.grype.outputs.cmd}} --only-fixed singlestore-labs/singlestoredb-dev
 
   publish-image:
-    if: github.ref_type == 'tag'
+    # Run if someone pushes a tag manually (or)
+    # Run when the PR is merged to default branch and auto-tag was successfull 
+    if: github.ref_type == 'tag' || (github.ref == 'refs/heads/main' && needs.auto-tag.result == 'success')
     runs-on: ubuntu-latest
 
     needs:
