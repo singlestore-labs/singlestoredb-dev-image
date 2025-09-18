@@ -116,6 +116,7 @@ jobs:
 
     needs:
       - build-and-test-image
+      - auto-tag
 
     steps:
       - name: Checkout source
