@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.61 - 2025-09-17
+- SingleStoreDB Version 9.0.8
+
 ## 0.2.60 - 2025-09-16
 - SingleStore Toolbox Version 1.18.5
 
