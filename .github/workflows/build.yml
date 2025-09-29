@@ -33,7 +33,7 @@ jobs:
             config.json
 
       - name: Extract version and create tag
-        if: steps.changed-files.outputs.only_changed
+        if: steps.changed-files.outputs.only_changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
