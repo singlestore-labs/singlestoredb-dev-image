@@ -1,9 +1,9 @@
 {
   "channel": "production",
-  "engine_channel": "rc",
-  "server": "9.0.8-2ea5c89193",
-  "toolbox": "1.18.5",
   "client": "1.0.7",
+  "engine_channel": "production",
+  "kai": "1.0.102",
+  "server": "9.0.9-c567fcf798",
   "studio": "4.0.14",
-  "kai": "1.0.102"
+  "toolbox": "1.18.5"
 }
