@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # use pipefail so that the return value of pipeline commands is not just the right most return value
-set -uo pipefail
+set -uxo pipefail
 
 # the singlestore user should be 999, change any user that was 999 to something different
 # in alma this is currently systemd-coredump

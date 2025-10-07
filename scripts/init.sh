@@ -46,6 +46,8 @@ sdb-admin -y update-config --all --set-global --key enable_external_functions --
 sdb-admin -y update-config --all --set-global --key http_api --value on
 sdb-admin -y update-config --all --set-global --key fts2_java_path --value /usr/local/jdk-21/bin/java
 sdb-admin -y update-config --all --set-global --key fts2_java_home --value /usr/local/jdk-21
+sdb-admin -y update-config --all --set-global --key java_pipelines_java_path --value /usr/local/jdk-21/bin/java
+sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/local/jdk-21/bin/java
 
 isEngineVersionGE()
 {
