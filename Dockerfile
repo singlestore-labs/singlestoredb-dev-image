@@ -1,17 +1,17 @@
 
 ARG KAI_VERSION # Since KAI_VERSION is used for a FROM later; must be declared before first FROM (of any image)
 FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION AS kai
-FROM almalinux:8.6-20220901 AS base
+FROM almalinux:10.0-20250825 AS base
 
 ARG SECURITY_UPDATES_AS_OF=2022-09-30
 
-RUN rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+RUN rpm --import https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os/RPM-GPG-KEY-AlmaLinux-10
 
 RUN dnf upgrade -y almalinux-release && \
     yum -y clean all
 
 RUN yum makecache --refresh && \
-    yum install -y yum-utils wget procps java-11-openjdk && \
+    yum install -y yum-utils wget procps gpg && \
     yum update -y curl && \
     yum-config-manager --save --setopt=skip_missing_names_on_install=0 && \
     yum -y update-minimal --setopt=tsflags=nodocs --nobest --security --sec-severity=Important --sec-severity=Critical && \
