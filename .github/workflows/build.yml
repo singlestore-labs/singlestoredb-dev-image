@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   auto-tag:
-    # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -37,10 +37,10 @@ jobs:
             config.json
 
       - name: Extract version and create tag
-        # if: steps.changed-files.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           # Extract most recent tag published and increment one top of it.
-          TAG_NAME="test-$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')"
+          TAG_NAME="$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')"
           
           echo "Creating tag: $TAG_NAME"
 
