@@ -37,7 +37,7 @@ jobs:
             config.json
 
       - name: Extract version and create tag
-        if: steps.changed-files.outputs.any_changed == 'true'
+        # if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           # Extract most recent tag published and increment one top of it.
           TAG_NAME="test-$(git describe --tags --abbrev=0 | awk -F. -v OFS=. '{$NF += 1 ; print}')"
