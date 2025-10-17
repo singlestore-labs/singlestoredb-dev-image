@@ -7,11 +7,7 @@ if [ -z "${VERSION}" ]; then
     exit 1
 fi
 
-LICENSE="${2:-}"
-if [ -z "${LICENSE}" ]; then
-    echo "Usage: $0 <version> <license>"
-    exit 1
-fi
+LICENSE="BDBkMTllNTkxYmJlNDRlN2U5ZWYyM2YzZDRmN2YwY2FmAAAAAAAAAAAEAAAAAAAAACgwNQIZALfDACVybqBaHxUHdjHEfTPECqOfdquMVwIYUKDroCKPtLk0qAuwzFHh5L6GxwTw9vDzAA=="
 
 sdb-admin -y delete-node --all
 sdb-deploy -y uninstall --all-versions

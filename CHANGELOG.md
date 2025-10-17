@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.2.63 - 2025-10-09
+- Upgrade the base image to AlmaLinux 10.0
+- SingleStoreDB Toolbox Version 1.18.6
+- SingleStoreDB Studio Version 4.1.1
+- SingleStoreDB Client Version 1.0.8
+
+## 0.2.62 - 2025-10-03
+- SingleStoreDB Version 9.0.9
+
+## 0.2.61 - 2025-09-17
+- SingleStoreDB Version 9.0.8
+
+## 0.2.60 - 2025-09-16
+- SingleStore Toolbox Version 1.18.5
+
+## 0.2.59 - 2025-08-20
+- SingleStoreDB Version 9.0.7
+
+## 0.2.58 - 2025-06-26
+- SingleStoreDB Version 9.0.6
+
+## 0.2.57 - 2025-06-18
+- SingleStoreDB Version 9.0.5
+
+## 0.2.56 - 2025-06-11
+- SingleStoreDB Version 9.0.3
+
+## 0.2.55 - 2025-06-04
+- Upgrade the target_version in test_switch_version to 8.9.24
+
+## 0.2.54 - 2025-06-04
+- SingleStoreDB Version 9.0.1 on RC channel
+
+## 0.2.53 - 2025-06-04
+- SingleStoreDB Version 9.0.1
+
+## 0.2.52 - 2025-05-21
+- SingleStoreDB Version 8.9.24
+
+## 0.2.51 - 2025-04-15
+- SingleStoreDB Version 8.9.19
+
+## 0.2.50 - 2025-03-25
+- SingleStoreDB Version 8.9.17
+
+## 0.2.49 - 2025-03-19
+- SingleStoreDB Version 8.9.14
+
+## 0.2.48 - 2025-03-12
+- SingleStoreDB Version 8.9.13
+
+## 0.2.47 - 2025-03-05
+- SingleStoreDB Version 8.9.12
+
+## 0.2.46 - 2025-02-25
+- SingleStoreDB Version 8.9.11
+
+## 0.2.45 - 2025-02-25
+- SingleStoreDB Version 8.9.10
+
+## 0.2.44 - 2025-02-04
+- SingleStoreDB Version 8.9.9
+
 ## 0.2.43 - 2025-01-14
 - SingleStoreDB Version 8.9.7
 

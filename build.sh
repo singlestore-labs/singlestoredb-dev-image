@@ -17,5 +17,6 @@ IMAGE_NAME=singlestoredb-dev
 docker build \
     -t "${IMAGE_REPO}/${IMAGE_NAME}:local" \
     --build-arg BOOTSTRAP_LICENSE=${BOOTSTRAP_LICENSE} \
-    --build-arg CONFIG="$(cat config.json)" \
+    --build-arg CONFIG="$(jq 'del(.kai)' config.json | tr '\n' ' ')" \
+    --build-arg KAI_VERSION="$(jq -r .kai config.json)" \
     .

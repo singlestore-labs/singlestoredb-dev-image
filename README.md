@@ -13,19 +13,19 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
   - [How to run the Docker image on **Windows**?](#how-to-run-the-docker-image-on-windows)
 - [How to open a SQL shell?](#how-to-open-a-sql-shell)
 - [How to access the SingleStore Studio UI?](#how-to-access-the-singlestore-studio-ui)
-- [Where can I learn how to use SingleStoreDB?](#where-can-i-learn-how-to-use-singlestoredb)
+- [Where can I learn how to use SingleStore?](#where-can-i-learn-how-to-use-singlestoredb)
 - [How to access the Data API?](#how-to-access-the-data-api)
 - [How to use WebAssembly (Wasm) backed functions?](#how-to-use-webassembly-wasm-backed-functions)
 - [How to use Docker volumes for persistent storage?](#how-to-use-docker-volumes-for-persistent-storage)
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
-- [How to set SingleStoreDB Global Variables?](#how-to-set-singlestoredb-global-variables)
-- [How to use a specific SingleStoreDB version?](#how-to-use-a-specific-singlestoredb-version)
-  - [What are some known SingleStoreDB versions?](#what-are-some-known-singlestoredb-versions)
+- [How to set SingleStore Global Variables?](#how-to-set-singlestoredb-global-variables)
+- [How to use a specific SingleStore version?](#how-to-use-a-specific-singlestoredb-version)
+  - [What are some known SingleStore versions?](#what-are-some-known-singlestoredb-versions)
   - [How to build a custom version of this Docker Image with a specific SingleStoreDB Version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version)
-  - [How to specify a SingleStoreDB version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
+  - [How to specify a SingleStore version at runtime?](#how-to-specify-a-singlestoredb-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
-  - [How to run SingleStoreDB in Github Actions?](#how-to-run-singlestoredb-in-github-actions)
-  - [How to run SingleStoreDB in Gitlab CI/CD?](#how-to-run-singlestoredb-in-gitlab-cicd)
+  - [How to run SingleStore in Github Actions?](#how-to-run-singlestoredb-in-github-actions)
+  - [How to run SingleStore in Gitlab CI/CD?](#how-to-run-singlestoredb-in-gitlab-cicd)
 - [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 - [Apple Silicon (M1/M2 chips) performance notes](#apple-silicon-m1m2-chips-performance-notes)
 
@@ -62,6 +62,22 @@ docker run \
     -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
+If you want to use Kai (API for MongoDB clients), set ENABLE_KAI=1 and expose 27017:
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
+    -e ENABLE_KAI=1 \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 -p 27017:27017 \
+    ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
+Then connect with, for example:
+
+```bash
+mongosh "mongodb://root:YOUR SINGLESTORE ROOT PASSWORD@localhost:27017/?authMechanism=PLAIN&loadBalanced=true"
 ```
 
 ### How to run the Docker image on **Apple Silicon** (M1/M2 chips)?
@@ -240,13 +256,13 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 8.9                                      | SingleStoreDB Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
-| 8.7                                      | SingleStoreDB Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
-| 8.5                                      | SingleStoreDB Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
-| 8.1                                      | SingleStoreDB Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
-| 8.0                                      | SingleStoreDB Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
-| 7.8                                      | SingleStoreDB Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
-| 7.6                                      | SingleStoreDB Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
+| 8.9                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
+| 8.7                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
+| 8.5                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
+| 8.1                                      | SingleStore Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
+| 8.0                                      | SingleStore Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
+| 7.8                                      | SingleStore Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
+| 7.6                                      | SingleStore Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
 
 ### How to build a custom version of this Docker Image with a specific SingleStore Version?
 
@@ -268,7 +284,7 @@ In order to use a specific version of SingleStore at runtime, you can start the 
 > **Warning**
 > This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStore each time. For this reason, we recommend building a custom version of this Docker image using [the instructions above][custom image method].
 
-Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStoreDB 8.9:
+Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStore 8.9:
 
 ```bash
 docker run \
