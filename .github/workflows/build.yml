@@ -18,7 +18,7 @@ jobs:
   auto-tag:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
-
+    environment: production
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -52,8 +52,6 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-        with:
-          ssh-key: "${{ secrets.COMMIT_KEY_INFRA_AUTOMATION }}"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -120,8 +118,6 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-        with:
-          ssh-key: "${{ secrets.COMMIT_KEY_INFRA_AUTOMATION }}"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
