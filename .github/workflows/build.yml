@@ -14,9 +14,6 @@ env:
   BOOTSTRAP_LICENSE: ${{ secrets.BOOTSTRAP_LICENSE }}
   SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
-permissions:
-  contents: read
-
 jobs:
   auto-tag:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -51,9 +48,6 @@ jobs:
 
   build-and-test-image:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout source
@@ -117,9 +111,6 @@ jobs:
     # Run when auto-tag creates a tag (which triggers a new workflow run with github.ref_type == 'tag')
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     needs:
       - build-and-test-image
@@ -173,8 +164,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - publish-image
-    permissions:
-      packages: read
 
     services:
       singlestoredb:
