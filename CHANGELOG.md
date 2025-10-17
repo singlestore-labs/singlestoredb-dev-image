@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.65 - 2025-10-16
+- SingleStoreDB Version 9.0.10
+
 ## 0.2.63 - 2025-10-09
 - Upgrade the base image to AlmaLinux 10.0
 - SingleStoreDB Toolbox Version 1.18.6
