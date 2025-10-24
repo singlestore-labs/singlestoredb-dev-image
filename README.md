@@ -31,14 +31,13 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 
 ## How to run the Docker image?
 
-This Docker image can be allocated up to 8 cores and up to 32 GB of RAM without the need for a license.
+This Docker image allows a cluster to be deployed in a self-contained container without the need for a license.
 
-When running a Docker container, either with or without a license, on a machine with:
+When running a Docker container on a machine with:
 
 * More than 32 cores, include the `--cpus=32` option.
 * More than 128GB of RAM, include the `--memory=128g` option.
 
-Refer to [What are license units and how do they apply to my cluster?](https://docs.singlestore.com/db/latest/introduction/faqs/general/#what-are-license-units-and-how-do-they-apply-to-my-cluster) for more information on license units and how they are calculated.
 > **Note:**
 > We recommend using an explicit image version tag whenever possible from the [list of image tags][versions] and/or [the changelog][changelog].
 
@@ -131,11 +130,11 @@ You can also connect to SingleStore using any MySQL compatible client on your ow
 | Username | root               |
 | Password | YOUR_ROOT_PASSWORD |
 
-## How to access the SingleStore Studio UI?
+## How to access the SingleStore UI?
 
-SingleStore Studio is a convenient way to manage SingleStore and run queries via a browser based UI. Studio runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access studio at http://localhost:8080.
+The SingleStore UI is a convenient way to connecto to SingleStore and run queries via a browser based UI. The UI runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access the UI at http://localhost:8080.
 
-When opening Studio you will see a login screen. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
+When opening the UI you will see a login screen. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
 
 ## Where can I learn how to use SingleStore?
 
@@ -230,7 +229,7 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 
 ## How to set SingleStore Global Variables?
 
-SingleStore can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStore Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
+SingleStore can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStoreDB Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
 
 For example, if you want to set `default_partitions_per_leaf` to 1, you would do this:
 
@@ -257,6 +256,7 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| 9.0                                      | SingleStore Self-Managed 9.0, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.0/release-notes/singlestore-memsql/9-0-release-notes/) |
 | 8.9                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
 | 8.7                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
 | 8.5                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
