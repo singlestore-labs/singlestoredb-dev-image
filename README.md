@@ -82,6 +82,19 @@ mongosh "mongodb://root:YOUR SINGLESTORE ROOT PASSWORD@localhost:27017/?authMech
 
 ### How to run the Docker image on **Apple Silicon** (M1/M2 chips)?
 
+> **Note:**
+>
+> The latest SingleStore Dev Image uses AlmaLinux 10 as the base OS, which relies on the x86‑64‑v3 instruction set. This version should work as expected on:
+>
+> * Apple silicon Macs running macOS 26
+> * Intel Macs running macOS 15 (Sequoia) and macOS 26 (Tahoe)
+> 
+> The version of Rosetta on Apple silicon Macs running macOS 15 does not support the x86‑64‑v3 instruction set. When attempting to run the latest SingleStore Dev Image on these Macs, a `Fatal glibc error: CPU does not support x86-64-v3` message is displayed.
+>
+> To remedy this, either:
+> * Upgrade your Apple silicon Mac to [macOS 26](https://www.apple.com/os/macos/)
+> * Use [SingleStore Helios](https://www.singlestore.com/pricing/) for development
+
 First, make sure you are using Docker desktop which supports the latest virtualization technology on Apple Silicon machines.
 
 Second, **you must enable "Use Virtualization framework" and "Use Rosetta for x86_64/amd64 emulation on Apple Silicon" in Docker Desktop preferences**. If you do not do this, SingleStore will run very slowly and consume a lot of power on your Mac. You can find these settings under Docker Desktop > Preferences > General.
