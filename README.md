@@ -20,7 +20,7 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How to set SingleStore global variables?](#how-to-set-singlestore-global-variables)
 - [How to use a specific SingleStore version?](#how-to-use-a-specific-singlestore-version)
-  - [What are some available SingleStore versions?](#what-are-some-available-singlestore-versions)
+  - [What are the available SingleStore versions?](#what-are-the-available-singlestore-versions)
   - [How to build a custom version of this Docker image with a specific SingleStore version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version)
   - [How to specify a SingleStore version at runtime?](#how-to-specify-a-singlestore-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
@@ -65,6 +65,7 @@ docker run \
 ```
 
 If you want to use Kai (API for MongoDB clients), set ENABLE_KAI=1 and expose 27017:
+
 ```bash
 docker run \
     -d --name singlestoredb-dev \
@@ -153,14 +154,14 @@ You will see a login screen when you open the UI. Use the username `root` and th
 
 Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
 
- * [Connect to SingleStore](https://docs.singlestore.com/db/latest/connect-to-your-cluster/)
+ * [Connect to SingleStore](https://docs.singlestore.com/db/latest/connect-to-singlestore/)
  * [Developer Resources](https://docs.singlestore.com/db/latest/developer-resources/)
  * [Integrations](https://docs.singlestore.com/db/latest/integrate-with-singlestore/)
  * [Load Data](https://docs.singlestore.com/db/latest/load-data/)
 
 ## How to access the Data API?
 
-In addition to supporting the MySQL Protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming you have forwarded port 9000 to your local machine, the following curl command demonstrates how you can use the Data API:
+In addition to supporting the MySQL protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming you have forwarded port 9000 to your local machine, the following curl command demonstrates how you can use the Data API:
 
 ```bash
 ~ ➜ curl -s -XPOST -H "content-type: application/json" -d '{ "sql": "select 1" }' root:YOUR_ROOT_PASSWORD@localhost:9000/api/v1/query/rows
@@ -194,9 +195,9 @@ This Docker image has Wasm functions enabled by default. You can learn how to co
 ## How to use Docker volumes for persistent storage?
 
 > **Note**
-> If you are [specifying a Singlestore version at runtime](#how-to-specify-a-singlestoredb-version-at-runtime), your data will always be overwritten when the container restarts each time, as the container will always attempt to re-download and re-initialize the installed version on each run.
+> If you are [specifying a Singlestore version at runtime](#how-to-specify-a-singlestore-version-at-runtime), your data will always be overwritten when the container restarts each time, as the container will always attempt to re-download and re-initialize the installed version on each run.
 >
-> To get around this, build a [custom image](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version) with your specific version.
+> To get around this, build a [custom image](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version) with your specific version.
 
 ```bash
 docker run \
@@ -244,7 +245,7 @@ Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to
 
 SingleStore can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStore Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
 
-For example, if you want to set `default_partitions_per_leaf` to 1, you would do this:
+For example, if you want to set `default_partitions_per_leaf` to `1`, you would do this:
 
 ```bash
 docker run \
@@ -263,7 +264,7 @@ If you specify a variable which is not supported by SingleStore, the image will 
 
 The SingleStore Dev Image uses the latest SingleStore version available in the managed service by default. If you would prefer to use another SingleStore version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
 
-### What are some available SingleStore versions?
+### What are the available SingleStore versions?
 
 You can use the version numbers in the first column of the following table in order to run a specific version of SingleStore. If you want to use a particular patch version, just specify that version instead.
 
@@ -312,7 +313,7 @@ docker run \
 > **Note**
 > You can mount `/server` into a Docker volume to preserve the installed SingleStore server binaries if you are unable to use the [custom image method]. This will increase subsequent startup performance at the expense of complexity.
 
-[custom image method]: #how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestoredb-version
+[custom image method]: #how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version
 
 ## How to use this container in a CI/CD environment?
 
