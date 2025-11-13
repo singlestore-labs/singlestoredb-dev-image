@@ -95,13 +95,13 @@ mongosh "mongodb://root:YOUR SINGLESTORE ROOT PASSWORD@localhost:27017/?authMech
 > * Upgrade your Apple silicon Mac to [macOS 26](https://www.apple.com/os/macos/)
 > * Use [SingleStore Helios](https://www.singlestore.com/pricing/) for development
 
-First, make sure you are using Docker Desktop which supports the latest virtualization technology on Apple Silicon machines.
+First, make sure you are using Docker Desktop which supports the latest virtualization technology on Apple silicon.
 
 Second, **you must enable "Use Virtualization framework" and "Use Rosetta for x86_64/amd64 emulation on Apple Silicon" in Docker Desktop preferences**. If you do not do this, SingleStore will run very slowly and consume a lot of power on your Mac. You can find these settings under Docker Desktop > Preferences > General.
 
 ![Screenshot of enabling the new Virtualization framework in Docker's preferences](.github/osx_docker_new_prefs.jpeg)
 
-Third, run the following command to start SingleStore. Note the `--platform linux/amd64` instruction which is required when running on Apple Silicon.
+Third, run the following command to start SingleStore. Note the `--platform linux/amd64` instruction which is required when running on Apple silicon.
 
 ```bash
 docker run \
