@@ -147,7 +147,7 @@ You can also connect to SingleStore using any MySQL compatible client on your ow
 
 The Studio UI is a convenient way to connect to SingleStore and run queries via a browser based UI. The UI runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access the UI at http://localhost:8080.
 
-You will see a login screen When you open the UI. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
+You will see a login screen when you open the UI. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
 
 ## Where can I learn how to use SingleStore?
 
@@ -407,9 +407,9 @@ SingleStore recommends using this new image unless you need to run an earlier ve
 
 ## Apple silicon performance notes
 
-Many of our performance optimizations are disabled in order to support running SingleStore on Apple silicon. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStore) and when running queries for the first time.
+Many of SingleStore's performance optimizations are disabled in order to support running on Apple silicon. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStore) and when running queries for the first time.
 
-To tune this performance impact (either faster or slower) you can change the number of cores and amount of RAM allocated to the Docker virtual machine by [following the documentation here][docker-resource-docs].
+To tune this performance impact to be either faster or slower, you can change the number of cores and amount of RAM allocated to the Docker virtual machine by [following the documentation here][docker-resource-docs].
 
 [versions]: https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
 [changelog]: CHANGELOG.md
