@@ -5,7 +5,7 @@ The SingleStore Dev Image is the fastest way to develop with [SingleStore][singl
 
 If you have any questions or issues, please file an issue on the [GitHub repo][gh-issues] or our [forums].
 
-[header-gh-actions]: #how-to-run-singlestoredb-in-github-actions
+[header-gh-actions]: #how-to-run-singlestore-in-github-actions
 
 - [How to run the Docker image?](#how-to-run-the-docker-image)
   - [How to run the Docker image on **Linux** or **Apple Intel**?](#how-to-run-the-docker-image-on-linux-or-apple-intel)
