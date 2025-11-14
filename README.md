@@ -20,13 +20,13 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 - [How to initialize this container with a SQL file?](#how-to-initialize-this-container-with-a-sql-file)
 - [How to set SingleStore global variables?](#how-to-set-singlestore-global-variables)
 - [How to use a specific SingleStore version?](#how-to-use-a-specific-singlestore-version)
-  - [What are the available SingleStore versions?](#what-are-the-available-singlestore-versions)
+  - [Which SingleStore versions are available?](#which-singlestore-versions-are-available)
   - [How to build a custom version of this Docker image with a specific SingleStore version?](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version)
   - [How to specify a SingleStore version at runtime?](#how-to-specify-a-singlestore-version-at-runtime)
 - [How to use this container in a CI/CD environment?](#how-to-use-this-container-in-a-cicd-environment)
   - [How to run SingleStore in GitHub Actions?](#how-to-run-singlestore-in-github-actions)
   - [How to run SingleStore in GitLab CI/CD?](#how-to-run-singlestore-in-gitlab-cicd)
-- [How to upgrade from `singlestore/cluster-in-a-box`?](#how-to-upgrade-from-singlestorecluster-in-a-box)
+- [How to upgrade from singlestore/cluster-in-a-box?](#how-to-upgrade-from-singlestorecluster-in-a-box)
 - [Apple silicon performance notes](#apple-silicon-performance-notes)
 
 ## How to run the Docker image?
@@ -64,7 +64,7 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
-If you want to use Kai (API for MongoDB clients), set ENABLE_KAI=1 and expose 27017:
+If you want to use Kai (API for MongoDB clients), set `ENABLE_KAI=1` and expose port 27017:
 
 ```bash
 docker run \
@@ -83,7 +83,7 @@ mongosh "mongodb://root:YOUR SINGLESTORE ROOT PASSWORD@localhost:27017/?authMech
 
 ### How to run the Docker image on **Apple silicon**?
 
-> **Note:**
+> **Note**
 >
 > The latest SingleStore Dev Image uses AlmaLinux 10 as the base OS, which relies on the x86‑64‑v3 instruction set. This version should work as expected on:
 >
@@ -115,7 +115,7 @@ docker run \
 
 ### How to run the Docker image on **Windows**?
 
-Windows PowerShell and command prompt (CMD) work best if you run the command on a single line. Alternatively you can use backticks for multi-line strings in PowerShell. Either way, the following single-line version of the command will work on Windows.
+Windows PowerShell and Command Prompt (CMD) work best if you run the command on a single line. Alternatively you can use backticks for multi-line strings in PowerShell. Either way, the following single-line version of the command will work on Windows.
 
 ```bash
 docker run -d --name singlestoredb-dev -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" -p 3306:3306 -p 8080:8080 -p 9000:9000 ghcr.io/singlestore-labs/singlestoredb-dev:latest
@@ -123,13 +123,15 @@ docker run -d --name singlestoredb-dev -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT P
 
 ## How to open a SQL shell?
 
-This image includes a shell which you can run interactively using `docker exec` like so:
+This image includes a shell which you can run interactively using `docker exec`.
+
+The following command will prompt you for the root password. 
 
 ```bash
 docker exec -it singlestoredb-dev singlestore -p
 ```
 
-The above command will prompt you for the root password. You can also provide the root password at the command line immediately after the `-p` flag like so:
+You can also provide the root password at the command line immediately after the `-p` flag like so:
 
 ```bash
 docker exec -it singlestoredb-dev singlestore -pYOUR_ROOT_PASSWORD
@@ -139,16 +141,16 @@ You can also connect to SingleStore using any MySQL compatible client on your ow
 
 | Key      | Value              |
 | -------- | ------------------ |
-| Host     | 127.0.0.1          |
-| Port     | 3306               |
-| Username | root               |
+| Host     | `127.0.0.1`          |
+| Port     | `3306`               |
+| Username | `root`               |
 | Password | YOUR_ROOT_PASSWORD |
 
 ## How to access the Studio UI?
 
-The Studio UI is a convenient way to connect to SingleStore and run queries via a browser based UI. The UI runs by default on port 8080 in the container. Assuming you have forwarded port 8080 to your local machine, you can access the UI at http://localhost:8080.
+The Studio UI is a convenient way to connect to SingleStore and run queries via a browser-based UI. The UI runs by default on port 8080 in the container. Assuming that you have forwarded port 8080 to your local machine, you can access the UI at [http://localhost:8080](http://localhost:8080).
 
-You will see a login screen when you open the UI. Use the username `root` and the `ROOT_PASSWORD` you set when starting the container.
+You will see a login screen when you open the UI. Use the username `root` and the associated password you set when starting the container.
 
 ## Where can I learn how to use SingleStore?
 
@@ -161,7 +163,7 @@ Now that you have SingleStore running, please check out the following sections o
 
 ## How to access the Data API?
 
-In addition to supporting the MySQL protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming you have forwarded port 9000 to your local machine, the following curl command demonstrates how you can use the Data API:
+In addition to supporting the MySQL protocol, SingleStore also has a JSON over HTTP protocol called the [Data API][data-api] which you can access at port 9000 in the container. Assuming that you have forwarded port 9000 to your local machine, the following `curl` command demonstrates how you can use the Data API:
 
 ```bash
 ~ ➜ curl -s -XPOST -H "content-type: application/json" -d '{ "sql": "select 1" }' root:YOUR_ROOT_PASSWORD@localhost:9000/api/v1/query/rows
@@ -190,7 +192,7 @@ create UDFs in a language of your choice using existing code libraries and run
 them in a sandboxed environment for enhanced security. It uses a linear memory
 model and provides hard memory protection boundaries.
 
-This Docker image has Wasm functions enabled by default. You can learn how to compile and load Wasm UDFs and UDAs into SingleStore [on our docs][wasm].
+This Docker image has Wasm functions enabled by default. You can learn how to compile and load Wasm UDFs and UDAs into SingleStore [in our docs][wasm].
 
 ## How to use Docker volumes for persistent storage?
 
@@ -211,9 +213,9 @@ docker run \
 After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without losing your data. Keep in mind that SingleStore does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
 
 > **Note**
-> In order to mount a host volume to the `/data` directory, you will need to `chown` the volume to UID=999 and GID=998 before mounting it. The volume will be initialized automatically if empty. Host volumes are only supported by the `/data` directory.
+> In order to mount a host volume to the `/data` directory, you will need to `chown` the volume to `UID=999` and `GID=998` before mounting it. The volume will be initialized automatically if empty. Host volumes are only supported by the `/data` directory.
 
-This Docker image has a number of volume mount points in addition to `/data`. Here is a table outlining each of the mount points along with roughly their contents:
+This Docker image has a number of volume mount points in addition to `/data`. The following table outlines each of the mount points along with roughly their contents:
 
 | mount path | description                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -223,9 +225,9 @@ This Docker image has a number of volume mount points in addition to `/data`. He
 
 ## How to initialize this container with a SQL file?
 
-When this docker image starts for the first time it will check to see if an `init.sql` file exists in its filesystem. The default location is `/init.sh`, but it can be customized via the `INIT_SQL` environment variable. If `init.sql` is found, the container will run it against the database as soon as SingleStore is ready.
+When this Docker image starts for the first time, it checks to see if an `init.sql` file exists in its filesystem. The default location is `/init.sh`, but it can be customized via the `INIT_SQL` environment variable. If `init.sql` is found, the container will run it against the database as soon as SingleStore is ready.
 
-One way to do this is mounting a `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
+One way to do this is by mounting an `init.sql` from your machine into the container using the `-v` flag. Here is an example of doing this:
 
 ```bash
 docker run \
@@ -236,14 +238,14 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
-Replace `${PWD}/test/init.sql` with an absolute path to the SQL file you want to initialize SingleStore with.
+Replace `${PWD}/test/init.sql` with an absolute path to the SQL file with which to initialize SingleStore.
 
 > **Note**
 > `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
 
 ## How to set SingleStore global variables?
 
-SingleStore can be configured through the use of global variables which you can [find in our documentation here][global-vars]. These variables can be set using environment variables when running the SingleStore Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
+SingleStore can be configured through the use of global variables which you can [find in our documentation][global-vars]. These variables can be set using environment variables when running the SingleStore Dev Image using the prefix `SINGLESTORE_SET_GLOBAL_`.
 
 For example, if you want to set `default_partitions_per_leaf` to `1`, you would do this:
 
@@ -258,13 +260,13 @@ docker run \
 
 Multiple environment variables can be specified if you want to configure multiple global variables in SingleStore.
 
-If you specify a variable which is not supported by SingleStore, the image will fail to start. You can see the full error message by inspecting the failed docker container's logs using `docker log`.
+If you specify a variable which is not supported by SingleStore, the image will fail to start. You can see the full error message by inspecting the failed Docker container's logs using `docker log`.
 
 ## How to use a specific SingleStore version?
 
-The SingleStore Dev Image uses the latest SingleStore version available in the managed service by default. If you would prefer to use another SingleStore version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
+By default, the SingleStore Dev Image uses the latest version of SingleStore available. If you would prefer to use another SingleStore version, you will need to either build a custom version of this image or specify the version at runtime by following the tutorials below.
 
-### What are the available SingleStore versions?
+### Which SingleStore versions are available?
 
 You can use the version numbers in the first column of the following table in order to run a specific version of SingleStore. If you want to use a particular patch version, just specify that version instead.
 
@@ -290,7 +292,7 @@ RUN /scripts/switch-version.sh SINGLESTORE_VERSION SINGLESTORE_LICENSE
 EOF
 ```
 
-Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use (see table above) as well as your license key. After running this command, you will have a new docker image called `singlestoredb-dev:custom` with the specific version of SingleStore installed and ready to use.
+Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the SingleStore version you want to use (see table above) as well as your license key. After running this command, you will have a new Docker image called `singlestoredb-dev:custom` with the specific version of SingleStore installed and ready to use.
 
 ### How to specify a SingleStore version at runtime?
 
@@ -352,7 +354,7 @@ jobs:
 
 ### How to run SingleStore in GitLab CI/CD?
 
-Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [three year old issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in GitLab, so hopefully this can be simplified eventually.
+Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in GitLab.
 
 > **Note**
 > You can add your SingleStore license key to GitLab secrets under the key `SINGLESTORE_LICENSE`.
@@ -385,7 +387,7 @@ testing:
 
 ## How to upgrade from `singlestore/cluster-in-a-box`?
 
-Before this image existed, there was another Docker image called `singlestore/cluster-in-a-box`. The `docker run` command for the previous image looked something like this:
+Before this image was created, there was another Docker image called `singlestore/cluster-in-a-box (CIAB)`. The `docker run` command for the CIAB image looked something like this:
 
 ```bash
 docker run -i --init \
@@ -396,19 +398,19 @@ docker run -i --init \
     singlestore/cluster-in-a-box
 ```
 
-The differences between the earlier image and this image are the following:
+The differences between the CIAB image and the Dev image are the following:
 
- * This image no longer needs to be initialized before you can use it
- * Startup time is much better - roughly 5 seconds with this image versus a minute with the earlier image
- * The [Data API][data-api] and External Functions features are enabled by default
- * Upgrade between versions is supported and tested (downgrade is not supported)
- * The new image is distributed through the GitHub Container Repository rather than the Docker Hub
+ * The Dev image no longer needs to be initialized before you can use it
+ * Startup time is much better - roughly 5 seconds with the Dev image versus a minute with the CIAB image
+ * The [Data API][data-api] and External Functions features are enabled by default in the Dev image
+ * Upgrade between versions is supported and tested with the Dev image (downgrades are not supported)
+ * The Dev image is distributed through the GitHub Container Repository rather than the Docker Hub
 
-SingleStore recommends using this new image unless you need to run an earlier version of SingleStore which has not been released in `singlestoredb-dev-image`.
+SingleStore recommends using the Dev image unless you need to run earlier versions of SingleStore that have not been released as a `singlestoredb-dev-image`.
 
 ## Apple silicon performance notes
 
-Many of SingleStore's performance optimizations are disabled in order to support running on Apple silicon. This can result in unexpectedly bad performance, especially during recovery (restarting SingleStore) and when running queries for the first time.
+Many of SingleStore's performance optimizations are disabled in order to support running on Apple silicon. This can result in unexpectedly poor performance, especially during recovery (restarting SingleStore) and when running queries for the first time.
 
 To tune this performance impact to be either faster or slower, you can change the number of cores and amount of RAM allocated to the Docker virtual machine by [following the documentation here][docker-resource-docs].
 
