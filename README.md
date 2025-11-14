@@ -223,9 +223,9 @@ This Docker image has a number of volume mount points in addition to `/data`. Th
 
 | Mount Path | Description                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ |
-| /data      | All of the data, config, and cache for the SingleStore cluster.                                                    |
-| /logs      | All of the tracelog files containing information that can help debug the cluster or observe its current behavior.  |
-| /server    | The installation directory containing server binaries and other installation state.                                |
+| `/data`      | All of the data, config, and cache for the SingleStore cluster.                                                    |
+| `/logs`      | All of the tracelog files containing information that can help debug the cluster or observe its current behavior.  |
+| `/server`    | The installation directory containing server binaries and other installation state.                                |
 
 ## How to initialize this container with a SQL file?
 
@@ -275,7 +275,7 @@ By default, the SingleStore Dev Image uses the latest version of SingleStore ava
 
 You can use the version numbers in the first column of the following table in order to run a specific version of SingleStore. If you want to use a particular patch version, just specify that version instead.
 
-| `SINGLESTORE_VERSION`                    | description                                                      |                                                                                                                                              |
+| `SINGLESTORE_VERSION`                    | Description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | 9.0                                      | SingleStore Self-Managed 9.0, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.0/release-notes/singlestore-memsql/9-0-release-notes/) |
 | 8.9                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
@@ -361,7 +361,7 @@ jobs:
 
 ### How to run SingleStore in GitLab CI/CD?
 
-Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in GitLab.
+Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed GitLab issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) with more information.
 
 > **Note**
 > 
