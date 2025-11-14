@@ -38,7 +38,8 @@ When running a Docker container on a machine with:
 * More than 32 cores, include the `--cpus=32` option.
 * More than 128GB of RAM, include the `--memory=128g` option.
 
-> **Note:**
+> **Note**
+> 
 > SingleStore recommends using an explicit image version tag whenever possible from the [list of image tags][versions] and/or [the changelog][changelog].
 
 ### How to run the Docker image on **Linux** or **Apple Intel**?
@@ -181,6 +182,7 @@ In addition to supporting the MySQL protocol, SingleStore also has a JSON over H
 ```
 
 > **Note**
+> 
 > For more information on how to use the Data API please [visit the documentation.][data-api]
 
 ## How to use WebAssembly (Wasm) backed functions?
@@ -197,6 +199,7 @@ This Docker image has Wasm functions enabled by default. You can learn how to co
 ## How to use Docker volumes for persistent storage?
 
 > **Note**
+> 
 > If you are [specifying a Singlestore version at runtime](#how-to-specify-a-singlestore-version-at-runtime), your data will always be overwritten when the container restarts each time, as the container will always attempt to re-download and re-initialize the installed version on each run.
 >
 > To get around this, build a [custom image](#how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version) with your specific version.
@@ -213,11 +216,12 @@ docker run \
 After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without losing your data. Keep in mind that SingleStore does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
 
 > **Note**
+> 
 > In order to mount a host volume to the `/data` directory, you will need to `chown` the volume to `UID=999` and `GID=998` before mounting it. The volume will be initialized automatically if empty. Host volumes are only supported by the `/data` directory.
 
 This Docker image has a number of volume mount points in addition to `/data`. The following table outlines each of the mount points along with roughly their contents:
 
-| mount path | description                                                                                                        |
+| Mount Path | Description                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------ |
 | /data      | All of the data, config, and cache for the SingleStore cluster.                                                    |
 | /logs      | All of the tracelog files containing information that can help debug the cluster or observe its current behavior.  |
@@ -241,7 +245,8 @@ docker run \
 Replace `${PWD}/test/init.sql` with an absolute path to the SQL file with which to initialize SingleStore.
 
 > **Note**
-> `/init.sql` will only be run once. If you want to run it again you will need to delete the file `/data/.init.sql.done` and then restart the container.
+> 
+> The `/init.sql` file will only be run once. To run it again, you will need to delete the file `/data/.init.sql.done` and then restart the container.
 
 ## How to set SingleStore global variables?
 
@@ -299,6 +304,7 @@ Make sure to replace `SINGLESTORE_VERSION` and `SINGLESTORE_LICENSE` with the Si
 In order to use a specific version of SingleStore at runtime, you can start the Docker container with the `SINGLESTORE_VERSION` environment variable set.
 
 > **Warning**
+> 
 > This method will result in the container taking much longer to start (roughly a minute) because it has to download and install SingleStore each time. For this reason, SingleStore recommends building a custom version of this Docker image using [the instructions above][custom image method].
 
 Here is an example of using the `SINGLESTORE_VERSION` environment variable to run SingleStore 9.0:
@@ -313,6 +319,7 @@ docker run \
 ```
 
 > **Note**
+> 
 > You can mount `/server` into a Docker volume to preserve the installed SingleStore server binaries if you are unable to use the [custom image method]. This will increase subsequent startup performance at the expense of complexity.
 
 [custom image method]: #how-to-build-a-custom-version-of-this-docker-image-with-a-specific-singlestore-version
@@ -357,6 +364,7 @@ jobs:
 Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) to address this problem in GitLab.
 
 > **Note**
+> 
 > You can add your SingleStore license key to GitLab secrets under the key `SINGLESTORE_LICENSE`.
 
 ```yaml
