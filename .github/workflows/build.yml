@@ -69,7 +69,7 @@ jobs:
           echo "KAI_VERSION="$(jq -r .kai config.json)"" >> ${GITHUB_ENV}
 
       - name: Build image for testing
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           push: false
           load: true
@@ -147,7 +147,7 @@ jobs:
             org.opencontainers.image.vendor=SingleStore
 
       - name: Build and publish image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           push: true
           context: .
