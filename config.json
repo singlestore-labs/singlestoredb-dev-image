@@ -3,7 +3,7 @@
   "client": "1.0.8",
   "engine_channel": "production",
   "kai": "1.0.102",
-  "server": "9.0.18-d1d50ad443",
+  "server": "9.0.19-d0d26f6dcf",
   "studio": "4.1.1",
   "toolbox": "1.18.6"
 }
