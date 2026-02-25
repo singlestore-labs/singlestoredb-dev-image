@@ -44,10 +44,6 @@ sdb-admin -y add-leaf --host 127.0.0.1 --port 3307 --password ${INIT_PW}
 
 sdb-admin -y update-config --all --set-global --key enable_external_functions --value on
 sdb-admin -y update-config --all --set-global --key http_api --value on
-sdb-admin -y update-config --all --set-global --key fts2_java_path --value /usr/local/jdk-21/bin/java
-sdb-admin -y update-config --all --set-global --key fts2_java_home --value /usr/local/jdk-21
-sdb-admin -y update-config --all --set-global --key java_pipelines_java_path --value /usr/local/jdk-21/bin/java
-sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/local/jdk-21/bin/java
 
 isEngineVersionGE()
 {
@@ -79,8 +75,19 @@ isEngineVersionGE()
     return 0
 }
 
-if isEngineVersionGE 8 5; then
-    sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/bin/java
+if isEngineVersionGE 9 1; then
+    sdb-admin -y update-config --all --set-global --key java_path --value /usr/local/jdk-25/bin/java
+    sdb-admin -y update-config --all --set-global --key fts2_java_home --value /usr/local/jdk-25
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java_path --value /usr/local/jdk-21/bin/java
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/local/jdk-21/bin/java
+elif isEngineVersionGE 8 7; then
+    sdb-admin -y update-config --all --set-global --key fts2_java_path --value /usr/local/jdk-21/bin/java
+    sdb-admin -y update-config --all --set-global --key fts2_java_home --value /usr/local/jdk-21
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java_path --value /usr/local/jdk-21/bin/java
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/local/jdk-21/bin/java
+elif isEngineVersionGE 8 5; then
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java_path --value /usr/local/jdk-21/bin/java
+    sdb-admin -y update-config --all --set-global --key java_pipelines_java11_path --value /usr/local/jdk-21/bin/java
 fi
 
 # stop the nodes to ensure we have a clean image state
