@@ -26,6 +26,12 @@ RUN cd /tmp && \
     rm -f openjdk-21+35_linux-x64_bin.tar.gz && \
     cd ..
 
+RUN cd /tmp && \
+    wget https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.2%2B10/OpenJDK25U-jre_x64_linux_hotspot_25.0.2_10.tar.gz && \
+    mkdir -p /usr/local/jdk-25 && \
+    tar xzvf OpenJDK25U-jre_x64_linux_hotspot_25.0.2_10.tar.gz -C /usr/local/jdk-25 --strip-components=1 && \
+    rm -f OpenJDK25U-jre_x64_linux_hotspot_25.0.2_10.tar.gz
+
 ENV JQ_VERSION='1.6'
 RUN wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/master/sig/jq-release-old.key -O /tmp/jq-release.key && \
     wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/master/sig/v${JQ_VERSION}/jq-linux64.asc -O /tmp/jq-linux64.asc && \
