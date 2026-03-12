@@ -31,16 +31,18 @@ If you have any questions or issues, please file an issue on the [GitHub repo][g
 
 ## How to run the Docker image?
 
-This Docker image allows a cluster to be deployed in a self-contained container without the need for a license.
+This Docker image creates a cluster consisting of one Master Aggregator and one leaf node on a machine (host) that has up to 8 cores and up to 64GB of RAM without the need for a license. 
 
-When running a Docker container on a machine with:
+When running a Docker container, either with or without a free edition license, on a machine with:
 
-* More than 32 cores, include the `--cpus=32` option.
-* More than 128GB of RAM, include the `--memory=128g` option.
+* More than 8 cores, include the `--cpus=8` option.
+* More than 64GB of RAM, include the `--memory=64g` option.
 
 > **Note**
 > 
 > SingleStore recommends using an explicit image version tag whenever possible from the [list of image tags][versions] and/or [the changelog][changelog].
+>
+> For `singlestoredb-dev-image` versions 0.2.40 and later, databases are restricted to two partitions. Using the `SINGLESTORE_SET_GLOBAL_DEFAULT_PARTITIONS_PER_LEAF` environment variable will not override this value.
 
 ### How to run the Docker image on **Linux** or **Apple Intel**?
 
