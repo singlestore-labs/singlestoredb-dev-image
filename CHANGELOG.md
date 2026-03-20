@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.79 - 2026-03-19
+- SingleStoreDB Version 9.1.1 on RC channel
+
 ## 0.2.78 - 2026-03-12
 - SingleStoreDB Toolbox Version 1.18.10
 
