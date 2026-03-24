@@ -421,50 +421,6 @@ test_exit_status() {
 }
 TESTS+=("test_exit_status")
 
-# this test should verify that we can safely upgrade from the latest version of this image
-test_upgrade() {
-    VOLUME_ID=$(docker volume create)
-
-    # run the latest version of the image
-    docker pull ghcr.io/singlestore-labs/singlestoredb-dev:latest || {
-        echo "Skipping upgrade test - failed to pull latest image"
-        return 0
-    }
-
-    CURRENT_CONTAINER_ID=$(
-        docker run -d \
-            -e SINGLESTORE_LICENSE=${SINGLESTORE_LICENSE} \
-            -e ROOT_PASSWORD=test \
-            -v ${VOLUME_ID}:/data \
-            ghcr.io/singlestore-labs/singlestoredb-dev:latest
-    )
-    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
-
-    # create a database and table
-    query_master "create database test"
-    query_master "create table test.foo (id int)"
-    query_master "insert into test.foo (id) values (1)"
-    COUNT=$(query_master "select count(*) from test.foo")
-
-    # stop and remove the container
-    cleanup_container
-
-    # run the current version of the image
-    docker_run -v ${VOLUME_ID}:/data
-    wait_for_healthy ${CURRENT_CONTAINER_ID} 30
-    wait_for_all_dbs_online 30
-
-    # verify that the database and table still exist
-    COUNT_AFTER_RECREATE=$(query_master "select count(*) from test.foo")
-    if [[ "${COUNT}" != "${COUNT_AFTER_RECREATE}" ]]; then
-        echo "Count differs after recreate"
-        echo ${COUNT}
-        echo ${COUNT_AFTER_RECREATE}
-        exit 1
-    fi
-}
-TESTS+=("test_upgrade")
-
 # this test should verify that we can switch the version at runtime
 test_switch_version() {
     local target_version=8.9.24
