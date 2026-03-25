@@ -215,7 +215,7 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
-After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without losing your data. Keep in mind that SingleStore does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
+After creating the container with a volume, you can re-create the container using the same volume to keep your data around.
 
 > **Note**
 > 
@@ -414,7 +414,6 @@ The differences between the CIAB image and the Dev image are the following:
  * The Dev image no longer needs to be initialized before you can use it
  * Startup time is much better - roughly 5 seconds with the Dev image versus a minute with the CIAB image
  * The [Data API][data-api] and External Functions features are enabled by default in the Dev image
- * Upgrade between versions is supported and tested with the Dev image (downgrades are not supported)
  * The Dev image is distributed through the GitHub Container Repository rather than the Docker Hub
 
 SingleStore recommends using the Dev image unless you need to run earlier versions of SingleStore that have not been released as a `singlestoredb-dev-image`.
