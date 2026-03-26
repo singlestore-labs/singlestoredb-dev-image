@@ -215,7 +215,7 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev
 ```
 
-After creating the container with a volume, you can re-create the container using the same volume to keep your data around. This can be used to upgrade SingleStore to new versions without losing your data. Keep in mind that SingleStore does **not** support downgrading. Make sure to take a backup of the volume before running the upgrade.
+After creating the container with a volume, you can re-create the container using the same volume to keep your data around.
 
 > **Note**
 > 
@@ -279,14 +279,15 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | Description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 9.0                                      | SingleStore Self-Managed 9.0, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.0/release-notes/singlestore-memsql/9-0-release-notes/) |
-| 8.9                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
-| 8.7                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
-| 8.5                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
-| 8.1                                      | SingleStore Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
-| 8.0                                      | SingleStore Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
-| 7.8                                      | SingleStore Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
-| 7.6                                      | SingleStore Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
+| `rc:9.1`                                   | SingleStore Self-Managed 9.1, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.1/release-notes/singlestore-memsql/9-1-release-notes/) |
+| `9.0`                                      | SingleStore Self-Managed 9.0, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.0/release-notes/singlestore-memsql/9-0-release-notes/) |
+| `8.9`                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
+| `8.7`                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
+| `8.5`                                      | SingleStore Self-Managed 8.5, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.5/release-notes/singlestore-memsql/8-5-release-notes/maintenance-release-changelog-v-8-5/) |
+| `8.1`                                      | SingleStore Self-Managed 8.1, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.1/release-notes/singlestore-memsql/8-1-release-notes/maintenance-release-changelog/) |
+| `8.0`                                      | SingleStore Self-Managed 8.0, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.0/release-notes/singlestore-memsql/8-0-release-notes/maintenance-release-changelog/) |
+| `7.8`                                      | SingleStore Self-Managed 7.8, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.8/release-notes/singlestore-memsql/7-8-release-notes/maintenance-release-changelog/) |
+| `7.6`                                      | SingleStore Self-Managed 7.6, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v7.6/release-notes/singlestore-memsql/7-6-release-notes/maintenance-release-changelog/) |
 
 ### How to build a custom version of this Docker image with a specific SingleStore version?
 
@@ -413,7 +414,6 @@ The differences between the CIAB image and the Dev image are the following:
  * The Dev image no longer needs to be initialized before you can use it
  * Startup time is much better - roughly 5 seconds with the Dev image versus a minute with the CIAB image
  * The [Data API][data-api] and External Functions features are enabled by default in the Dev image
- * Upgrade between versions is supported and tested with the Dev image (downgrades are not supported)
  * The Dev image is distributed through the GitHub Container Repository rather than the Docker Hub
 
 SingleStore recommends using the Dev image unless you need to run earlier versions of SingleStore that have not been released as a `singlestoredb-dev-image`.
