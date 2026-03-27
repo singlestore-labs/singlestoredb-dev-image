@@ -48,6 +48,8 @@ When running a Docker container, either with or without a free edition license, 
 
 *See next section for Apple silicon instructions.*
 
+If you want to run the latest production release of SingleStore:
+
 ```bash
 docker run \
     -d --name singlestoredb-dev \
@@ -55,6 +57,26 @@ docker run \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
+
+If you want to run the latest SingleStore 9.1 release candidate (RC):
+
+```bash
+docker run \
+    -d --name singlestoredb-dev \
+    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
+    -e SINGLESTORE_LICENSE="YOUR SINGLESTORE LICENSE" \
+    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
+    --version rc:9.1
+    ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
+> **Note**
+> 
+> If you had previously installed a SingleStore 9.1 RC Dev image and have found that 9.1-specific features are not working as expected (such as `fv_vector_f16_type`):
+> * Remove (delete) your existing 9.1 RC Dev image and container
+> * Run the latest 9.1 RC Dev image
+>
+> Performing these steps will ensure that all 9.1 features are enabled in the 9.1 RC Dev image.
 
 If you want to configure a specific license, simply pass it as an environment variable:
 
