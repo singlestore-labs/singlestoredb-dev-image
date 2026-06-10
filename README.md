@@ -176,6 +176,16 @@ The Studio UI is a convenient way to connect to SingleStore and run queries via 
 
 You will see a login screen when you open the UI. Use the username `root` and the associated password you set when starting the container.
 
+Studio runs by default. If you don't need it (for example, in a CI/CD environment), you can disable it by setting `ENABLE_STUDIO=0`.
+
+```bash
+docker run -d --name singlestoredb-dev \
+    -e ROOT_PASSWORD="<secure-password>" \
+    -e ENABLE_STUDIO=0 \
+    -p 3306:3306 -p 9000:9000 \
+    ghcr.io/singlestore-labs/singlestoredb-dev:latest
+```
+
 ## Where can I learn how to use SingleStore?
 
 Now that you have SingleStore running, please check out the following sections of our official documentation for guides on what to do next.
