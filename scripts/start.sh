@@ -19,7 +19,6 @@ fi
 LOG_FILES=(
     "/logs/master/tracelogs/memsql.log"
     "/logs/leaf/tracelogs/memsql.log"
-    "/var/lib/singlestoredb-studio/studio.log"
 )
 
 # initialize /data directory from /server/data.tgz if /data/nodes.hcl is missing
@@ -81,8 +80,13 @@ fi
 
 # start studio last, this also allows studio to double purpose as a network accessible "ready" indicator
 # which is useful for CI/CD environments which don't respect the Docker HEALTHCHECK
-singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
-STUDIO_PID=$!
+STUDIO_PID=-1
+ENABLE_STUDIO=${ENABLE_STUDIO:-1}
+if [[ "${ENABLE_STUDIO,,}" == "1" || "${ENABLE_STUDIO,,}" == "true" ]]; then
+    singlestoredb-studio --port 8080 1>/dev/null 2>/dev/null &
+    STUDIO_PID=$!
+    LOG_FILES+=("/var/lib/singlestoredb-studio/studio.log")
+fi
 
 KAI_PROXY_PID=-1
 ENABLE_KAI=${ENABLE_KAI:-0}
@@ -105,7 +109,9 @@ cleanup() {
     if [ ${KAI_PROXY_PID} -ne -1 ]; then
         kill ${KAI_PROXY_PID} 2>/dev/null || true
     fi
-    kill ${STUDIO_PID} 2>/dev/null || true
+    if [ ${STUDIO_PID} -ne -1 ]; then
+        kill ${STUDIO_PID} 2>/dev/null || true
+    fi
     kill ${TAIL_PID} 2>/dev/null || true
     echo "Stopped."
 }
@@ -115,8 +121,11 @@ handle_sigchld() {
     PIDS=(
         ${MASTER_PID}
         ${LEAF_PID}
-        ${STUDIO_PID}
     )
+    # add studio pid if it exists
+    if [ ${STUDIO_PID} -ne -1 ]; then
+        PIDS+=(${STUDIO_PID})
+    fi
     # add kai proxy pid if it exists
     if [ ${KAI_PROXY_PID} -ne -1 ]; then
         PIDS+=(${KAI_PROXY_PID})

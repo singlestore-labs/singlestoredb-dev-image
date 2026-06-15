@@ -482,6 +482,19 @@ test_kai() {
 }
 TESTS+=("test_kai")
 
+test_studio_disabled() {
+    # studio should not run when ENABLE_STUDIO=0, and the container should still
+    # become healthy (the healthcheck does not depend on studio)
+    docker_run -e ENABLE_STUDIO=0
+
+    echo "verifying studio is not running"
+    [[ $(docker_exec ps aux | grep singlestoredb-studio | grep -v grep | wc -l) -eq 0 ]] || (
+        docker_exec ps aux
+        exit 1
+    )
+}
+TESTS+=("test_studio_disabled")
+
 run_test() {
     echo "Running ${1}..."
     ${1}
