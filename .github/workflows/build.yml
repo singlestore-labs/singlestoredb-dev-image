@@ -112,6 +112,10 @@ jobs:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     needs:
       - build-and-test-image
 
