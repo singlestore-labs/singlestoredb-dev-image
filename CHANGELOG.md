@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.86 - 2026-10-14
+- SingleStoreDB Toolbox Version 1.19.2
+
 ## 0.2.85 - 2026-09-22
 - SingleStoreDB Toolbox Version 1.19.1
 
