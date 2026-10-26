@@ -58,24 +58,24 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
-If you want to run the latest SingleStore 9.1 release candidate (RC):
+If you want to run the latest SingleStore 10 release:
 
 ```bash
 docker run \
     -d --name singlestoredb-dev \
     -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
-    -e SINGLESTORE_VERSION="rc:9.1" \
+    -e SINGLESTORE_VERSION="10" \
     -p 3306:3306 -p 8080:8080 -p 9000:9000 \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
 > **Note**
 > 
-> If you had previously run a SingleStore 9.1 RC Dev image and found that 9.1-specific features were not working as expected (such as `fv_vector_f16_type`):
-> * Remove (delete) your existing 9.1 RC Dev image and container
-> * Run the latest 9.1 RC Dev image
+> If you had previously run a SingleStore 10 Dev image and found that 10-specific features were not working as expected (such as `fv_vector_f16_type`):
+> * Remove (delete) your existing 10 Dev image and container
+> * Run the latest 10 Dev image
 >
-> Performing these steps will ensure that all SingleStore 9.1 features are enabled in the 9.1 RC Dev image.
+> Performing these steps will ensure that all SingleStore 10 features are enabled in the 10 Dev image.
 
 If you want to configure a specific license, simply pass it as an environment variable:
 
@@ -139,7 +139,7 @@ docker run \
 
 ### How to run the Docker image on **Windows**?
 
-Windows PowerShell and Command Prompt (CMD) work best if you run the command on a single line. Alternatively you can use backticks for multi-line strings in PowerShell. Either way, the following single-line version of the command will work on Windows.
+Windows PowerShell and Command Prompt (CMD) work best if you run the command on a single line. Alternatively, you can use backticks for multi-line strings in PowerShell. Either way, the following single-line version of the command will work on Windows.
 
 ```bash
 docker run -d --name singlestoredb-dev -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" -p 3306:3306 -p 8080:8080 -p 9000:9000 ghcr.io/singlestore-labs/singlestoredb-dev:latest
@@ -310,7 +310,7 @@ You can use the version numbers in the first column of the following table in or
 
 | `SINGLESTORE_VERSION`                    | Description                                                      |                                                                                                                                              |
 | ---------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rc:9.1`                                   | SingleStore Self-Managed 9.1, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.1/release-notes/singlestore-memsql/9-1-release-notes/) |
+| `10`                                   | SingleStore Self-Managed 10, see release log for latest version | [changelog](https://docs.singlestore.com/db/v10/release-notes/singlestore-memsql/10-release-notes/) |
 | `9.0`                                      | SingleStore Self-Managed 9.0, see release log for latest version | [changelog](https://docs.singlestore.com/db/v9.0/release-notes/singlestore-memsql/9-0-release-notes/) |
 | `8.9`                                      | SingleStore Self-Managed 8.9, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.9/release-notes/singlestore-memsql/8-9-release-notes/maintenance-release-changelog-v-8-9/) |
 | `8.7`                                      | SingleStore Self-Managed 8.7, see changelog for latest version | [changelog](https://docs.singlestore.com/db/v8.7/release-notes/singlestore-memsql/8-7-release-notes/maintenance-release-changelog-v-8-7/) |
@@ -395,7 +395,7 @@ jobs:
 
 ### How to run SingleStore in GitLab CI/CD?
 
-Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed GitLab issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) with more information.
+Here is an example workflow which runs SingleStore as a service and queries it from the job. Unfortunately, GitLab does not support Docker healthchecks for services, so additional logic must be added to wait for SingleStore to be ready. There is a [closed GitLab issue](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3984) with more information.
 
 > **Note**
 > 
