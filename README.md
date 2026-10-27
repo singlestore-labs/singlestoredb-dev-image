@@ -58,24 +58,13 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
-If you want to run the latest SingleStore 10 release:
-
-```bash
-docker run \
-    -d --name singlestoredb-dev \
-    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
-    -e SINGLESTORE_VERSION="10" \
-    -p 3306:3306 -p 8080:8080 -p 9000:9000 \
-    ghcr.io/singlestore-labs/singlestoredb-dev:latest
-```
-
 > **Note**
 > 
-> If you had previously run a SingleStore 10 Dev image and found that 10-specific features were not working as expected (such as `fv_vector_f16_type`):
-> * Remove (delete) your existing 10 Dev image and container
-> * Run the latest 10 Dev image
+> If you had previously run a SingleStore Dev image and found that specific features were not working as expected (such as `fv_vector_f16_type`):
+> * Remove (delete) your existing Dev image and container
+> * Run the latest Dev image
 >
-> Performing these steps will ensure that all SingleStore 10 features are enabled in the 10 Dev image.
+> Performing these steps will ensure that all SingleStore features are enabled in the Dev image.
 
 If you want to configure a specific license, simply pass it as an environment variable:
 
