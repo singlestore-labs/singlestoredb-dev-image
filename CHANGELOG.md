@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.88 - 2026-10-30
+- Remove Kai (MongoDB API) from the image. Images at 0.2.87 and earlier still include it and can be started with `ENABLE_KAI=1`.
+
 ## 0.2.87 - 2026-10-27
 - SingleStoreDB Version 10.8.1
 

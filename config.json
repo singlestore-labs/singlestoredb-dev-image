@@ -2,7 +2,6 @@
   "channel": "production",
   "client": "1.0.8",
   "engine_channel": "production",
-  "kai": "1.0.102",
   "server": "10.8.1-feb332facf",
   "studio": "4.1.1",
   "toolbox": "1.19.2"

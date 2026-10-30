@@ -1,6 +1,3 @@
-
-ARG KAI_VERSION # Since KAI_VERSION is used for a FROM later; must be declared before first FROM (of any image)
-FROM gcr.io/singlestore-public/internal-mongoproxy:v$KAI_VERSION AS kai
 FROM almalinux:10.0-20250825 AS base
 
 RUN rpm --import https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os/RPM-GPG-KEY-AlmaLinux-10
@@ -47,13 +44,6 @@ RUN wget --no-check-certificate https://raw.githubusercontent.com/jqlang/jq/mast
 ARG BOOTSTRAP_LICENSE
 ARG CONFIG
 
-RUN yum-config-manager --add-repo https://repo.mongodb.org/yum/redhat/9/mongodb-org/8.0/x86_64/ && \
-    yum-config-manager --save --setopt=repo.mongodb.org_yum_redhat_9_mongodb-org_8.0_x86_64_.gpgkey=https://www.mongodb.org/static/pgp/server-8.0.asc && \
-    yum install -y mongodb-mongosh && \
-    yum -y clean all
-
-ADD scripts/mongosh /usr/local/bin/mongosh
-ADD scripts/mongosh-auth /usr/local/bin/mongosh-auth
 ADD scripts/singlestore-auth /usr/local/bin/singlestore-auth
 
 ADD scripts/setup-singlestore-user.sh /scripts/setup-singlestore-user.sh
@@ -69,7 +59,6 @@ RUN yum-config-manager --add-repo https://release.memsql.com/$(echo "${CONFIG}" 
 RUN mkdir -p /server && chown -R singlestore:singlestore /server
 RUN mkdir -p /data && chown -R singlestore:singlestore /data
 RUN mkdir -p /logs && chown -R singlestore:singlestore /logs
-RUN mkdir -p /kai && chown -R singlestore:singlestore /kai
 
 # remove /var/lib/memsql, this image uses /data and /logs to store everything
 # we also need to be able to detect when we are upgrading from the old cluster in a box image
@@ -109,9 +98,6 @@ ADD licenses /licenses
 ADD scripts/healthcheck.sh /scripts/healthcheck.sh
 HEALTHCHECK --interval=5s --timeout=5s --start-period=90s --retries=3 CMD /scripts/healthcheck.sh
 
-COPY --from=kai / /kai
-
 EXPOSE 3306/tcp
 EXPOSE 8080/tcp
 EXPOSE 9000/tcp
-EXPOSE 27017/tcp
