@@ -88,15 +88,6 @@ if [[ "${ENABLE_STUDIO,,}" == "1" || "${ENABLE_STUDIO,,}" == "true" ]]; then
     LOG_FILES+=("/var/lib/singlestoredb-studio/studio.log")
 fi
 
-KAI_PROXY_PID=-1
-ENABLE_KAI=${ENABLE_KAI:-0}
-if [[ "${ENABLE_KAI,,}" == "1" || "${ENABLE_KAI,,}" == "true" ]]; then
-    echo "Installing Kai Proxy..."
-    DB=localhost:3306 PASSWORD=${ROOT_PASSWORD} ENABLE_TLS_TO_DB=0 ./kai/mongoproxy-install >/logs/kai.log
-    DB=localhost:3306 ENABLE_TLS_TO_DB=0 ENABLE_TLS=false LISTEN_ON_HOST=0.0.0.0 LISTEN_ON_PORT=27017 UNSAFE_ALLOW_INSECURE_BINDING=1 ./kai/mongoproxy >>/logs/kai.log &
-    KAI_PROXY_PID=$!
-    LOG_FILES+=("/logs/kai.log")
-fi
 # tail the logs
 tail --pid ${MASTER_PID} --pid ${LEAF_PID} -F $(printf '%s ' "${LOG_FILES[@]}") &
 TAIL_PID=$!
@@ -106,9 +97,6 @@ cleanup() {
 
     echo "Stopping Cluster..."
     memsqlctl -jy stop-node --all
-    if [ ${KAI_PROXY_PID} -ne -1 ]; then
-        kill ${KAI_PROXY_PID} 2>/dev/null || true
-    fi
     if [ ${STUDIO_PID} -ne -1 ]; then
         kill ${STUDIO_PID} 2>/dev/null || true
     fi
@@ -125,10 +113,6 @@ handle_sigchld() {
     # add studio pid if it exists
     if [ ${STUDIO_PID} -ne -1 ]; then
         PIDS+=(${STUDIO_PID})
-    fi
-    # add kai proxy pid if it exists
-    if [ ${KAI_PROXY_PID} -ne -1 ]; then
-        PIDS+=(${KAI_PROXY_PID})
     fi
 
     # if any of our primary processes have died, clean up and exit

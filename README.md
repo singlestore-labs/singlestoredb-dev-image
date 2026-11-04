@@ -77,23 +77,6 @@ docker run \
     ghcr.io/singlestore-labs/singlestoredb-dev:latest
 ```
 
-If you want to use Kai (API for MongoDB clients), set `ENABLE_KAI=1` and expose port 27017:
-
-```bash
-docker run \
-    -d --name singlestoredb-dev \
-    -e ROOT_PASSWORD="YOUR SINGLESTORE ROOT PASSWORD" \
-    -e ENABLE_KAI=1 \
-    -p 3306:3306 -p 8080:8080 -p 9000:9000 -p 27017:27017 \
-    ghcr.io/singlestore-labs/singlestoredb-dev:latest
-```
-
-Then connect with, for example:
-
-```bash
-mongosh "mongodb://root:YOUR SINGLESTORE ROOT PASSWORD@localhost:27017/?authMechanism=PLAIN&loadBalanced=true"
-```
-
 ### How to run the Docker image on **Apple silicon**?
 
 > **Note**
