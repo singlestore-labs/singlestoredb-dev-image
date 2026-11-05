@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.90 - 2026-11-05
+- SingleStoreDB Toolbox Version 1.19.3
+
 ## 0.2.89 - 2026-11-04
 - Remove Kai (MongoDB API) from the image. Images at 0.2.88 and earlier still include it and can be started with `ENABLE_KAI=1`.
 
