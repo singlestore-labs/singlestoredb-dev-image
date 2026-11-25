@@ -2,7 +2,7 @@
   "channel": "production",
   "client": "1.0.8",
   "engine_channel": "production",
-  "server": "10.9.0-d16d12a6ad",
+  "server": "10.10.0-c4ffce6b7c",
   "studio": "4.1.1",
   "toolbox": "1.19.4"
 }
